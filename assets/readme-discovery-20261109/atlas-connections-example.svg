@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+<title id="title">A real discovery, with its evidence in view</title><desc id="desc">Illustrated Atlas Connections view using shared real interests. Science fiction has a solid sourced genre connection to A Memory Called Empire. Mad Men and Red Rising connect through a dashed, unconfirmed hypothesis about power, status and persuasion.</desc>
+<rect width="1200" height="900" fill="white"/><g font-family="Arial, Helvetica, sans-serif">
+<g transform="translate(48 32) scale(.13)"><g fill="#090909">
+    <path d="M0 2H205V40H122V271H82V40H0Z"/>
+    <path d="M191 83H231V122C249 93 276 75 317 81V121C310 118 302 117 294 117C256 117 231 142 231 184V271H191Z"/>
+    <path d="M335 83H375V186C375 225 385 241 413 241C444 241 468 222 468 184V83H507V271H469V248C451 270 432 277 405 277C357 277 335 248 335 195Z"/>
+    <path d="M536 83H576V122C594 93 621 75 656 81V121C649 118 642 117 634 117C600 117 576 142 576 184V271H536Z"/>
+    <path d="M675 0H716V271H675Z"/>
+  </g></g>
+<text x="1152" y="53" font-size="10" fill="#6B6B6B" font-weight="550" letter-spacing="1.25" text-anchor="end">ILLUSTRATED VIEW · SELECTED REAL INTERESTS</text>
+<text x="48" y="119" font-size="38" fill="#090909" font-weight="500" >Where your interests meet</text>
+<text x="48" y="151" font-size="17" fill="#6B6B6B" font-weight="400" >Choose a work. Follow the connections. Inspect what supports each one.</text>
+<line x1="48" y1="180" x2="1152" y2="180" stroke="#E6E6E6" stroke-width="1" />
+<text x="48" y="207" font-size="13" fill="#2355C6" font-weight="550" >Connections</text>
+<text x="158" y="207" font-size="13" fill="#6B6B6B" font-weight="400" >Interests</text>
+<text x="245" y="207" font-size="13" fill="#6B6B6B" font-weight="400" >Activity</text>
+<rect x="48" y="236" width="1104" height="567" rx="0" fill="white" stroke="#E6E6E6"/>
+<line x1="312" y1="236" x2="312" y2="803" stroke="#E6E6E6" stroke-width="1" />
+<text x="68" y="270" font-size="17" fill="#090909" font-weight="550" >Explore a work</text>
+<rect x="68" y="292" width="224" height="39" rx="3" fill="white" stroke="#A0A0A0"/>
+<text x="80" y="316" font-size="12" fill="#6B6B6B" font-weight="400" >Find a work or interest</text>
+<rect x="59" y="346" width="244" height="75" rx="0" fill="#FAFAFA" stroke="none"/>
+<line x1="59" y1="346" x2="59" y2="421" stroke="#2355C6" stroke-width="2" />
+<text x="77" y="368" font-size="14" fill="#090909" font-weight="500" >A Memory Called Empire</text>
+<text x="77" y="392" font-size="11" fill="#6B6B6B" font-weight="400" >1 sourced path · 1 hypothesis</text>
+<text x="77" y="459" font-size="14" fill="#090909" font-weight="500" >The Art of Gandhara</text>
+<text x="77" y="483" font-size="11" fill="#6B6B6B" font-weight="400" >Recommended</text>
+<text x="77" y="550" font-size="14" fill="#090909" font-weight="500" >Exploring Chinese Teas</text>
+<text x="77" y="569" font-size="14" fill="#090909" font-weight="500" >and Tea Wares</text>
+<text x="77" y="593" font-size="11" fill="#6B6B6B" font-weight="400" >Recommended</text>
+<text x="338" y="271" font-size="26" fill="#090909" font-weight="500" >A Memory Called Empire</text>
+<text x="338" y="299" font-size="13" fill="#6B6B6B" font-weight="400" >Arkady Martine · book</text>
+<text x="338" y="325" font-size="10" fill="#2355C6" font-weight="550" letter-spacing="1">RECOMMENDED</text>
+<text x="338" y="366" font-size="10" fill="#6B6B6B" font-weight="550" letter-spacing="1.25" >YOUR INTERESTS</text>
+<text x="565" y="366" font-size="10" fill="#6B6B6B" font-weight="550" letter-spacing="1.25" >RECORDED CONNECTIONS</text>
+<text x="905" y="366" font-size="10" fill="#6B6B6B" font-weight="550" letter-spacing="1.25" >A DISCOVERY</text>
+<line x1="512" y1="420" x2="865" y2="442" stroke="#090909" stroke-width="1.5" />
+<text x="680" y="410" font-size="11" fill="#6B6B6B" font-weight="400" text-anchor="middle">Genre: science fiction</text>
+<line x1="512" y1="520" x2="565" y2="558" stroke="#C53A32" stroke-width="1.5" stroke-dasharray="5 5"/>
+<line x1="512" y1="610" x2="565" y2="592" stroke="#C53A32" stroke-width="1.5" stroke-dasharray="5 5"/>
+<line x1="830" y1="575" x2="865" y2="490" stroke="#C53A32" stroke-width="1.5" stroke-dasharray="5 5"/>
+<rect x="338" y="390" width="174" height="61" rx="3" fill="white" stroke="#E6E6E6"/>
+<text x="352" y="410" font-size="10" fill="#6B6B6B" font-weight="550" letter-spacing="1.25" >STATED INTEREST</text>
+<text x="352" y="434" font-size="15" fill="#090909" font-weight="500" >Science fiction</text>
+<rect x="338" y="490" width="174" height="61" rx="3" fill="white" stroke="#E6E6E6"/>
+<text x="352" y="510" font-size="10" fill="#6B6B6B" font-weight="550" letter-spacing="1.25" >ENJOYED WORK</text>
+<text x="352" y="534" font-size="15" fill="#090909" font-weight="500" >Mad Men</text>
+<rect x="338" y="580" width="174" height="61" rx="3" fill="white" stroke="#E6E6E6"/>
+<text x="352" y="600" font-size="10" fill="#6B6B6B" font-weight="550" letter-spacing="1.25" >ENJOYED WORK</text>
+<text x="352" y="624" font-size="15" fill="#090909" font-weight="500" >Red Rising</text>
+<rect x="565" y="535" width="265" height="82" rx="3" fill="white" stroke="#C53A32"/>
+<text x="579" y="555" font-size="10" fill="#C53A32" font-weight="550" letter-spacing="1.25" >TENTATIVE TASTE HYPOTHESIS</text>
+<text x="579" y="579" font-size="15" fill="#C53A32" font-weight="500" >Power, status</text>
+<text x="579" y="600" font-size="15" fill="#C53A32" font-weight="500" >and persuasion</text>
+<rect x="865" y="411" width="259" height="94" rx="3" fill="#FAFAFA" stroke="#090909"/>
+<text x="879" y="431" font-size="10" fill="#6B6B6B" font-weight="550" letter-spacing="1.25" >WORK</text>
+<text x="879" y="455" font-size="15" fill="#090909" font-weight="500" >A Memory Called</text>
+<text x="879" y="476" font-size="15" fill="#090909" font-weight="500" >Empire</text>
+<line x1="338" y1="677" x2="1124" y2="677" stroke="#E6E6E6" stroke-width="1" />
+<text x="338" y="705" font-size="10" fill="#6B6B6B" font-weight="550" letter-spacing="1.25" >INSPECT THE SOURCE</text>
+<text x="338" y="734" font-size="13" fill="#6B6B6B" font-weight="400" >Pan Macmillan identifies a space opera about an ambassador navigating imperial intrigue.</text>
+<text x="338" y="760" font-size="13" fill="#C53A32" font-weight="400" >The proposed link to Mad Men and Red Rising remains a hypothesis to test.</text>
+<line x1="48" y1="839" x2="83" y2="839" stroke="#090909" stroke-width="1.5" />
+<text x="93" y="843" font-size="12" fill="#6B6B6B" font-weight="400" >Sourced content relationship</text>
+<line x1="352" y1="839" x2="387" y2="839" stroke="#C53A32" stroke-width="1.5" stroke-dasharray="5 5"/>
+<text x="397" y="843" font-size="12" fill="#C53A32" font-weight="400" >Unconfirmed taste hypothesis</text>
+<text x="1152" y="843" font-size="12" fill="#6B6B6B" font-weight="400" text-anchor="end">Personal fit stays open to feedback.</text>
+</g></svg>

@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>Taste atlas · Trurl</title>
+<style>
+:root {
+  --paper: #FFFFFF;
+  --wash: #F7F7F7;
+  --ink: #090909;
+  --muted: #6B6B6B;
+  --rule: #E6E6E6;
+  --blue: #2355C6;
+  --red: #C53A32;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: var(--sans);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); }
+main { max-width: 78rem; padding: 0 clamp(1rem, 4vw, 3.25rem) 3rem; margin: auto; }
+h1, h2, h3, p, dl, dd, ul { margin: 0; }
+h1, h2 { font-weight: 500; letter-spacing: -.045em; }
+h1 { font-size: clamp(3.25rem, 7.5vw, 6.5rem); line-height: 1.02; }
+h2 { font-size: clamp(2rem, 3.6vw, 3rem); line-height: 1.08; }
+h3 { font-size: 1rem; font-weight: 620; }
+p { line-height: 1.55; }
+button, input, select { color: inherit; font: inherit; }
+button { cursor: pointer; }
+button:disabled { opacity: .5; cursor: default; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.masthead, .map-heading, .index-heading, .pager {
+  display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+}
+.masthead { min-height: 4rem; border-bottom: 1px solid var(--rule); }
+.brand { display: block; width: 4.15rem; height: auto; }
+.micro {
+  font-size: .69rem; font-weight: 600; letter-spacing: .13em;
+  line-height: 1.45; text-transform: uppercase;
+}
+.accent { color: var(--blue); }
+.muted { color: var(--muted); }
+.hero { padding: clamp(2.4rem, 6vw, 4.75rem) 0 2.25rem; }
+.hero .micro { margin-bottom: 1rem; }
+.hero .muted { max-width: 38rem; margin-top: 1.3rem; font-size: clamp(1rem, 1.8vw, 1.16rem); }
+.totals { display: grid; grid-template-columns: repeat(4, 1fr); border-block: 1px solid var(--rule); }
+.totals div { display: flex; flex-direction: column-reverse; gap: .45rem; padding: 1rem; }
+.totals div + div { border-left: 1px solid var(--rule); }
+.totals dd { font-size: 2.45rem; font-weight: 500; letter-spacing: -.04em; font-variant-numeric: tabular-nums; line-height: 1; }
+section { margin-top: clamp(2.5rem, 6vw, 4.6rem); }
+.section-intro { display: grid; gap: .55rem; margin-bottom: 1.15rem; }
+.section-intro > .muted { max-width: 46rem; }
+.workspace {
+  display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(16rem, 1fr);
+  border: 1px solid var(--rule);
+}
+.map-frame { padding: 1.15rem; min-width: 0; align-self: stretch; display: flex; flex-direction: column; }
+.map-heading { padding-bottom: .55rem; border-bottom: 1px solid var(--rule); }
+.map-stage { min-height: 16rem; flex: 1; display: grid; align-items: center; }
+#interest-map { display: block; width: 100%; max-height: 35rem; overflow: visible; }
+.orbit { fill: none; stroke: var(--muted); stroke-width: 1; }
+.orbit-outer { stroke-dasharray: 3 7; }
+.orbit-possibility { stroke-dasharray: 1 6; stroke: var(--muted); }
+.orbit-possibility[hidden], .possibility-key[hidden] { display: none; }
+.guide { fill: none; stroke: var(--rule); stroke-width: 1; }
+.guide-ticks { stroke: var(--muted); }
+.map-label { fill: var(--muted); font: 600 10px var(--sans); letter-spacing: 2px; }
+.map-total { fill: var(--ink); font: 500 44px var(--sans); }
+.node { cursor: pointer; outline: none; }
+.node .halo { fill: none; stroke: var(--blue); stroke-width: 1; opacity: 0; }
+.node .point { stroke: var(--blue); stroke-width: 2; }
+.node[data-kind="stated"] .point { fill: var(--ink); stroke: var(--ink); }
+.node[data-kind="tentative"] .point { fill: var(--paper); }
+.node[data-kind="possibility"] .point { fill: var(--paper); stroke: var(--red); stroke-width: 1.5; }
+.node[data-kind="possibility"] .halo { stroke: var(--red); }
+.node:hover .halo, .node:focus-visible .halo, .node[aria-pressed="true"] .halo { opacity: 1; }
+.node:focus-visible .halo { stroke-width: 2; }
+.node[aria-pressed="true"] .halo { fill: #2355C60A; }
+.node[data-kind="possibility"][aria-pressed="true"] .halo { fill: #C53A320A; }
+.legend { display: flex; flex-wrap: wrap; gap: .5rem 1.1rem; list-style: none; padding: 0; font-size: .85rem; }
+.legend li { display: flex; align-items: center; gap: .42rem; }
+.dot { width: .57rem; height: .57rem; border: 1.5px solid var(--blue); border-radius: 50%; flex: none; }
+.dot.stated { background: var(--ink); border-color: var(--ink); }
+.dot.possibility { border-color: var(--red); border-radius: 0; transform: rotate(45deg); }
+.map-caption { color: var(--muted); font-size: .8rem; margin-top: .65rem; }
+.index { min-width: 0; padding: 1.15rem; background: var(--paper); border-left: 1px solid var(--rule); }
+.index-heading { margin-bottom: .85rem; }
+.filters { display: grid; gap: .65rem; }
+.filters label { display: grid; gap: .32rem; }
+.filters label span { color: var(--muted); font-size: .79rem; }
+.filters input, .filters select {
+  min-width: 0; width: 100%; padding: .6rem .65rem; background: var(--paper);
+  border: 1px solid var(--muted); border-radius: .2rem;
+}
+.filters input::placeholder { color: var(--muted); }
+.index-list {
+  display: flex; flex-direction: column; gap: .2rem; list-style: none;
+  padding: .25rem; margin: .8rem -.25rem .25rem; min-height: 2rem; max-height: 16rem; overflow: auto;
+}
+.index-list button {
+  display: flex; align-items: start; text-align: left; gap: .65rem; width: 100%; border: 1px solid transparent;
+  border-radius: .2rem; padding: .55rem .6rem; background: transparent; line-height: 1.35; overflow-wrap: anywhere;
+}
+.index-list .dot { margin-top: .26rem; }
+.index-list button:hover { background: var(--wash); border-color: var(--muted); }
+.index-list button[aria-pressed="true"] { background: var(--wash); border-color: var(--blue); }
+.empty { color: var(--muted); padding: .6rem .35rem; }
+.pager { margin: .45rem 0 .75rem; }
+.pager button {
+  border: 1px solid var(--muted); background: transparent; padding: .36rem .55rem;
+  border-radius: .2rem; font-size: .8rem;
+}
+.pager-status { color: var(--muted); text-align: center; font-size: .75rem; }
+.detail { border-top: 1px solid var(--rule); padding-top: .9rem; min-height: 5.2rem; overflow-wrap: anywhere; }
+.detail p { font-size: .83rem; margin-top: .28rem; }
+.activity {
+  display: grid; grid-auto-columns: minmax(5rem, 1fr); grid-auto-flow: column; gap: .45rem;
+  overflow-x: auto; padding: .85rem .25rem; margin: 0 -.25rem; border-bottom: 1px solid var(--rule);
+}
+.activity[hidden], .pager[hidden] { display: none; }
+.month {
+  display: grid; gap: .5rem; padding: .38rem; background: transparent; text-align: center;
+  border: 1px solid transparent; border-radius: .2rem;
+}
+.month:hover { background: var(--wash); border-color: var(--muted); }
+.month[aria-pressed="true"] { background: var(--wash); border-color: var(--blue); }
+.bars {
+  display: flex; justify-content: center; align-items: end; gap: .3rem; height: 7rem;
+  border-bottom: 1px solid var(--rule);
+}
+.bar { width: min(1.3rem, 30%); }
+.bar.suggestions, .swatch.suggestions { background: var(--blue); }
+.bar.feedback, .swatch.feedback { background: var(--ink); }
+.swatch { display: inline-block; width: .65rem; height: .65rem; border-radius: 1px; }
+.month-label { color: var(--muted); font-size: .75rem; }
+.activity-detail { min-height: 1.5rem; margin: .45rem 0 .65rem; font-size: .9rem; }
+.undated { color: var(--muted); font-size: .8rem; margin-top: .65rem; }
+footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: .83rem; }
+.atlas-nav { display: flex; flex-wrap: wrap; gap: 1.2rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); font-size: .86rem; }
+.atlas-nav a, .work-link, .source-list a { color: var(--blue); text-underline-offset: .2em; }
+.connection-summary { font-size: .85rem; color: var(--muted); }
+.connection-workspace { display: grid; grid-template-columns: minmax(13rem, .75fr) minmax(0, 2.25fr); border: 1px solid var(--rule); }
+.work-index { padding: 1.15rem; border-right: 1px solid var(--rule); min-width: 0; }
+.work-index .filters { margin-top: .9rem; }
+.work-list { list-style: none; padding: 0; margin-top: 1rem; max-height: 37rem; overflow: auto; }
+.work-list li + li { border-top: 1px solid var(--rule); }
+.work-list button { width: 100%; text-align: left; padding: .85rem .65rem; border: 1px solid transparent; border-left: 2px solid transparent; background: transparent; line-height: 1.4; overflow-wrap: anywhere; }
+.work-list button:hover { background: var(--wash); }
+.work-list button[aria-pressed="true"] { background: var(--wash); border-left-color: var(--blue); }
+.work-list .work-name { display: block; font-size: .9rem; font-weight: 550; }
+.work-list .work-meta { display: block; color: var(--muted); font-size: .73rem; margin-top: .35rem; }
+.connection-focus { min-width: 0; padding: 1.35rem; }
+.work-heading { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
+.work-heading h3 { font-size: clamp(1.35rem, 2.5vw, 1.9rem); font-weight: 500; letter-spacing: -.025em; line-height: 1.18; }
+.work-heading .work-link { flex: none; font-size: .83rem; margin-top: .2rem; }
+.work-byline { margin: .45rem 0 .35rem; font-size: .87rem; color: var(--muted); }
+.work-status { font-size: .75rem; }
+.facts-button { margin-top: .7rem; padding: .4rem .6rem; border: 1px solid var(--muted); border-radius: .2rem; background: transparent; font-size: .78rem; }
+.facts-button[aria-pressed="true"] { border-color: var(--blue); background: var(--wash); }
+.connection-key { margin-top: 1.25rem; font-size: .76rem; }
+.line-key { width: 1.5rem; height: 0; border-top: 2px solid var(--ink); }
+.line-key.editorial { border-color: var(--blue); border-top-style: dashed; }
+.line-key.hypothesis { border-color: var(--red); border-top-style: dashed; }
+.connection-map-frame { margin-top: 1.1rem; border-block: 1px solid var(--rule); }
+#connection-map { display: block; width: 100%; height: auto; min-height: 14rem; }
+.connection-edge { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+.connection-edge-hit { fill: none; stroke: transparent; stroke-width: 18; cursor: pointer; }
+.connection-edge.editorial { stroke: var(--blue); stroke-dasharray: 5 5; }
+.connection-edge.mapping { stroke: var(--blue); stroke-dasharray: 2 5; }
+.connection-edge.hypothesis { stroke: var(--red); stroke-dasharray: 5 5; }
+.connection-path { cursor: pointer; outline: none; }
+.connection-path:hover .connection-edge, .connection-path:focus-visible .connection-edge, .connection-path[aria-pressed="true"] .connection-edge { stroke-width: 3; }
+.connection-node { cursor: pointer; outline: none; }
+.connection-node rect { fill: var(--paper); stroke: var(--rule); stroke-width: 1; }
+.connection-node:hover rect, .connection-node:focus-visible rect, .connection-node[aria-pressed="true"] rect { stroke: var(--blue); stroke-width: 1.5; }
+.connection-node.work rect { fill: var(--wash); stroke: var(--ink); }
+.connection-node.hypothesis rect { stroke: var(--red); }
+.connection-node .node-heading { fill: var(--muted); font: 600 10px var(--sans); letter-spacing: 1px; }
+.connection-node .node-title { fill: var(--ink); font: 500 16px var(--sans); }
+.connection-node.hypothesis .node-heading { fill: var(--red); }
+.connection-node.editorial .node-heading { fill: var(--blue); }
+.connection-caption { margin-top: .65rem; color: var(--muted); font-size: .78rem; }
+.route-heading { margin: 1.3rem 0 .65rem; font-size: .85rem; }
+.route-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); list-style: none; gap: .5rem; padding: 0; }
+.route-list button { display: block; width: 100%; height: 100%; border: 1px solid var(--rule); border-radius: .2rem; background: transparent; padding: .75rem; text-align: left; line-height: 1.4; overflow-wrap: anywhere; }
+.route-list button:hover { border-color: var(--muted); }
+.route-list button[aria-pressed="true"] { border-color: var(--blue); background: var(--wash); }
+.route-list .route-label { display: block; font-size: .83rem; font-weight: 550; }
+.route-list .route-kind { display: block; font-size: .7rem; color: var(--muted); margin-top: .3rem; }
+.route-list .hypothesis .route-kind { color: var(--red); }
+.source-detail { margin-top: 1rem; padding: 1rem 0 0; border-top: 1px solid var(--rule); overflow-wrap: anywhere; }
+.source-detail h4 { font-size: .95rem; font-weight: 550; line-height: 1.45; margin: .3rem 0 .45rem; }
+.source-detail p { font-size: .85rem; }
+.source-list { list-style: none; margin: .7rem 0 0; padding: 0; }
+.source-list li { font-size: .8rem; margin: .5rem 0; }
+.source-list small { display: block; color: var(--muted); margin-top: .15rem; }
+.fact + .fact { margin-top: .9rem; padding-top: .9rem; border-top: 1px solid var(--rule); }
+.connection-notice, .connection-limits { color: var(--muted); font-size: .8rem; margin-top: .7rem; }
+.connection-empty { padding: 1.75rem; background: var(--wash); border: 1px solid var(--rule); }
+.connection-empty p { margin-top: .4rem; max-width: 46rem; }
+.interest-coverage { margin-top: 1rem; border: 1px solid var(--rule); padding: .85rem 1rem; }
+.interest-coverage summary { cursor: pointer; font-size: .85rem; font-weight: 550; }
+.coverage-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem 1.25rem; padding: 0; margin: 1rem 0 0; list-style: none; }
+.coverage-list li { border-top: 1px solid var(--rule); padding-top: .6rem; min-width: 0; }
+.coverage-list button { display: block; width: 100%; background: transparent; border: 0; padding: 0; color: var(--blue); text-align: left; font: inherit; font-size: .85rem; cursor: pointer; overflow-wrap: anywhere; }
+.coverage-label { display: block; font-size: .85rem; overflow-wrap: anywhere; }
+.coverage-status { display: block; color: var(--muted); font-size: .75rem; margin-top: .2rem; }
+.interest-coverage[hidden] { display: none; }
+.connection-workspace[hidden], .connection-empty[hidden], #connection-map[hidden], .work-link[hidden] { display: none; }
+@media (max-width: 65rem) {
+  .connection-workspace { grid-template-columns: minmax(11rem, .7fr) minmax(0, 1.7fr); }
+  .connection-focus { padding: 1rem; }
+}
+@media (max-width: 54rem) {
+  .workspace { grid-template-columns: minmax(0, 1fr); }
+  .index { border-left: 0; border-top: 1px solid var(--rule); }
+  .map-stage { min-height: 0; }
+  .filters { grid-template-columns: minmax(0, 1fr) minmax(0, .8fr); }
+  .connection-workspace { grid-template-columns: minmax(0, 1fr); }
+  .work-index { border-right: 0; border-bottom: 1px solid var(--rule); }
+  .work-list { display: flex; gap: .45rem; max-height: 12rem; overflow: auto; }
+  .work-list li { flex: 0 0 14rem; border: 1px solid var(--rule); }
+  .work-list li + li { border-top: 1px solid var(--rule); }
+  .work-list button { height: 100%; }
+}
+@media (max-width: 36rem) {
+  .totals { grid-template-columns: repeat(2, 1fr); }
+  .totals div:nth-child(3) { border-left: 0; }
+  .totals div:nth-child(n+3) { border-top: 1px solid var(--rule); }
+  .map-frame, .index { padding: .85rem; }
+  .connection-focus, .work-index { padding: .85rem; }
+  .route-list { grid-template-columns: minmax(0, 1fr); }
+  .coverage-list { grid-template-columns: minmax(0, 1fr); }
+  .work-heading { display: block; }
+  .work-heading .work-link { display: inline-block; margin-top: .65rem; }
+  .connection-map-frame { overflow-x: auto; }
+  #connection-map { width: 43rem; max-width: none; min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0s !important; transition-duration: 0s !important; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header class="masthead">
+    <svg class="brand" viewBox="0 0 720 278" role="img" aria-label="Trurl">
+      <g fill="#090909">
+        <path d="M0 2H205V40H122V271H82V40H0Z"/>
+        <path d="M191 83H231V122C249 93 276 75 317 81V121C310 118 302 117 294 117C256 117 231 142 231 184V271H191Z"/>
+        <path d="M335 83H375V186C375 225 385 241 413 241C444 241 468 222 468 184V83H507V271H469V248C451 270 432 277 405 277C357 277 335 248 335 195Z"/>
+        <path d="M536 83H576V122C594 93 621 75 656 81V121C649 118 642 117 634 117C600 117 576 142 576 184V271H536Z"/>
+        <path d="M675 0H716V271H675Z"/>
+      </g>
+    </svg>
+    <span class="micro muted">Private profile view</span>
+  </header>
+
+  <div class="hero">
+    <p class="micro accent">The intellectual &amp; taste model</p>
+    <h1>Your taste atlas</h1>
+    <p class="muted">See how your interests meet in the works Trurl discovers. Follow the connections, inspect the sources and explore possibilities still taking shape.</p>
+  </div>
+
+  <dl class="totals" aria-label="Profile counts">
+    <div><dt class="micro muted">Stated interests</dt><dd id="count-stated">—</dd></div>
+    <div><dt class="micro muted">Tentative interests</dt><dd id="count-tentative">—</dd></div>
+    <div><dt class="micro muted">Suggestions</dt><dd id="count-suggestions">—</dd></div>
+    <div><dt class="micro muted">Feedback entries</dt><dd id="count-feedback">—</dd></div>
+  </dl>
+
+  <nav class="atlas-nav" aria-label="Atlas sections"><a href="#connections">Connections</a><a href="#interests">Interests</a><a href="#activity-section">Activity</a></nav>
+
+  <section id="connections" aria-labelledby="connections-title">
+    <div class="section-intro">
+      <p class="micro accent">01 / Connections</p>
+      <h2 id="connections-title">Where your interests meet</h2>
+      <p class="muted">Choose a work to see its connections to your interests. Solid paths follow sourced content relationships; dashed paths show the reasoning behind a recommendation or a possibility being explored.</p>
+      <p id="connection-summary" class="connection-summary"></p>
+    </div>
+    <div id="connection-empty" class="connection-empty" hidden><h3>No content connections yet</h3><p id="connection-empty-message"></p></div>
+    <div id="connection-workspace" class="connection-workspace" hidden>
+      <aside class="work-index" aria-labelledby="work-index-title">
+        <h3 id="work-index-title">Explore a work</h3>
+        <div class="filters">
+          <label><span>Find a work, interest or creator</span><input id="work-search" type="search" placeholder="Search the connections" autocomplete="off"></label>
+          <label><span>Show</span><select id="work-filter"><option value="recommended">Recommended</option><option value="all">All researched works</option><option value="unrecommended">Researched only</option></select></label>
+        </div>
+        <ul id="work-list" class="work-list" aria-label="Works in the content graph"></ul>
+        <p id="work-result-count" class="connection-notice" role="status"></p>
+      </aside>
+      <div class="connection-focus">
+        <div class="work-heading"><h3 id="connection-work-title"></h3><a id="connection-work-link" class="work-link" target="_blank" rel="noopener noreferrer" hidden>Open work ↗</a></div>
+        <p id="connection-work-creator" class="work-byline"></p>
+        <p id="connection-work-status" class="work-status accent"></p>
+        <button id="connection-show-facts" class="facts-button" type="button" aria-pressed="false">View sourced facts</button>
+        <ul class="legend connection-key" aria-label="Connection key">
+          <li><span class="line-key" aria-hidden="true"></span>Sourced relationship</li>
+          <li><span class="line-key editorial" aria-hidden="true"></span>Recommendation reasoning</li>
+          <li><span class="line-key hypothesis" aria-hidden="true"></span>Taste hypothesis</li>
+        </ul>
+        <div class="connection-map-frame"><svg id="connection-map" viewBox="0 0 900 330" role="group" aria-label="Connections from your interests to the selected work"></svg></div>
+        <p class="connection-caption">Select a path or card to inspect it. The graph shows connections available today; recorded recommendation reasoning keeps its own evidence.</p>
+        <h4 class="route-heading">Follow a connection</h4>
+        <ul id="connection-routes" class="route-list" aria-label="Accessible connection paths"></ul>
+        <div id="connection-detail" class="source-detail" role="status" aria-live="polite"></div>
+        <p id="connection-work-limits" class="connection-limits"></p>
+      </div>
+    </div>
+    <p id="connection-coverage" class="connection-notice"></p>
+    <p id="connection-mapping-notice" class="connection-notice"></p>
+    <details id="interest-coverage" class="interest-coverage" hidden>
+      <summary>See coverage for every interest</summary>
+      <p class="connection-notice">An interest can have its own content record before research connects it to a work. Sourced routes, direct work mappings and recorded recommendation reasons are counted separately.</p>
+      <ul id="interest-coverage-list" class="coverage-list" aria-label="Content graph coverage by interest"></ul>
+    </details>
+  </section>
+
+  <section id="interests" aria-labelledby="interests-title">
+    <div class="section-intro">
+      <p class="micro accent">02 / Interests</p>
+      <h2 id="interests-title">What draws you in</h2>
+      <p class="muted">Explore your stated interests, tentative observations and the possibilities Trurl is exploring. Choose a point or find it in the index.</p>
+    </div>
+
+    <div class="workspace">
+      <div class="map-frame">
+        <div class="map-heading">
+          <p class="micro">Interest map</p>
+          <p class="micro muted">By evidence</p>
+        </div>
+        <div class="map-stage">
+          <svg id="interest-map" viewBox="0 0 640 520" role="group" aria-label="Selectable interests by evidence type">
+            <g aria-hidden="true">
+              <path class="guide" d="M48 260h544M320 24v472M128 96l384 328M128 424L512 96"/>
+              <ellipse class="guide" cx="320" cy="260" rx="288" ry="228"/>
+              <ellipse id="possibility-orbit" class="orbit orbit-possibility" cx="320" cy="260" rx="288" ry="228" hidden/>
+              <ellipse class="orbit orbit-outer" cx="320" cy="260" rx="245" ry="191"/>
+              <ellipse class="orbit" cx="320" cy="260" rx="156" ry="113"/>
+              <path class="guide guide-ticks" d="M320 24v14m0 444v14M32 260h15m546 0h15M75 253v14m490-14v14M313 69h14m-14 382h14M164 253v14m312-14v14M313 147h14m-14 226h14"/>
+              <circle cx="320" cy="260" r="56" fill="var(--paper)" stroke="var(--rule)"/>
+              <text id="map-count" class="map-total" x="320" y="269" text-anchor="middle">0</text>
+              <text class="map-label" x="320" y="290" text-anchor="middle">IN VIEW</text>
+            </g>
+            <g id="map-nodes"></g>
+          </svg>
+        </div>
+        <ul class="legend" aria-label="Map key">
+          <li><span class="dot stated" aria-hidden="true"></span>Stated · inner ring</li>
+          <li><span class="dot" aria-hidden="true"></span>Tentative · outer ring</li>
+          <li id="possibility-key" class="possibility-key" hidden><span class="dot possibility" aria-hidden="true"></span><span id="possibility-label">Possibilities · edge</span></li>
+        </ul>
+        <p class="map-caption">Points are spaced around each ring for legibility.</p>
+      </div>
+
+      <aside class="index" aria-labelledby="index-title">
+        <div class="index-heading"><h3 id="index-title">Interest index</h3><span class="micro muted">A–Z</span></div>
+        <div class="filters">
+          <label><span>Find an interest</span><input id="search" type="search" placeholder="Search the index" autocomplete="off"></label>
+          <label><span>Evidence type</span><select id="kind"><option value="all">All records</option><option value="stated">Stated</option><option value="tentative">Tentative</option><option value="possibility">Possibilities</option></select></label>
+        </div>
+        <ul id="index-list" class="index-list" aria-label="Interests"></ul>
+        <div id="pager" class="pager" hidden>
+          <button id="previous" type="button">Previous</button>
+          <span id="pager-status" class="pager-status" role="status"></span>
+          <button id="next" type="button">Next</button>
+        </div>
+        <div id="interest-detail" class="detail" role="status" aria-live="polite"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="activity-section" aria-labelledby="activity-title">
+    <div class="section-intro">
+      <p class="micro accent">03 / Activity</p>
+      <h2 id="activity-title">On the record</h2>
+      <p class="muted">Suggestions and feedback with dates, grouped by month.</p>
+    </div>
+    <div id="activity" class="activity" role="group" aria-label="Select a month" hidden></div>
+    <p id="activity-detail" class="activity-detail" role="status" aria-live="polite"></p>
+    <ul class="legend" aria-label="Activity key">
+      <li><span class="swatch suggestions" aria-hidden="true"></span>Suggestions</li>
+      <li><span class="swatch feedback" aria-hidden="true"></span>Feedback entries</li>
+    </ul>
+    <p id="undated" class="undated"></p>
+  </section>
+
+  <footer>This file contains your private taste data. Keep it with your private profile.</footer>
+  <noscript><p>Enable JavaScript to explore the connections, interests and activity stored in this file.</p></noscript>
+</main>
+
+<script id="atlas-data" type="application/json">__TRURL_ATLAS_DATA__</script>
+<script>
+"use strict";
+const data = JSON.parse(document.getElementById("atlas-data").textContent);
+const get = (id) => document.getElementById(id);
+const number = new Intl.NumberFormat();
+const shortMonth = new Intl.DateTimeFormat("en-GB", { month: "short", year: "numeric", timeZone: "UTC" });
+const longDate = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+const svgNamespace = "http://www.w3.org/2000/svg";
+const pageSize = 24;
+const possibilities = data.possibilities || [];
+const interests = [...data.interests, ...possibilities].sort((a, b) => a.topic.localeCompare(b.topic));
+const search = get("search");
+const kind = get("kind");
+const nodeLayer = get("map-nodes");
+const indexList = get("index-list");
+const detail = get("interest-detail");
+const previous = get("previous");
+const next = get("next");
+let page = 0;
+let selected = null;
+let controls = [];
+
+for (const name of ["stated", "tentative", "suggestions", "feedback"]) {
+  get(`count-${name}`).textContent = number.format(data.counts[name]);
+}
+get("possibility-orbit").toggleAttribute("hidden", possibilities.length === 0);
+get("possibility-key").hidden = possibilities.length === 0;
+get("possibility-label").textContent = `${number.format(possibilities.length)} ${possibilities.length === 1 ? "possibility" : "possibilities"} · edge`;
+
+function element(tag, text, className) {
+  const node = document.createElement(tag);
+  if (text !== undefined) node.textContent = text;
+  if (className) node.className = className;
+  return node;
+}
+
+function svg(tag, attributes) {
+  const node = document.createElementNS(svgNamespace, tag);
+  for (const [name, value] of Object.entries(attributes)) node.setAttribute(name, value);
+  return node;
+}
+
+function choose(interest) {
+  selected = interest;
+  for (const [item, point, button] of controls) {
+    const pressed = String(item === selected);
+    point.setAttribute("aria-pressed", pressed);
+    button.setAttribute("aria-pressed", pressed);
+  }
+  if (!interest) {
+    detail.replaceChildren(element("p", "Choose an interest to see its record.", "muted"));
+    return;
+  }
+  const evidence = { stated: "Stated interest", tentative: "Tentative observation", possibility: "Possible interest · exploring" }[interest.kind];
+  const recorded = interest.recorded
+    ? "On record " + longDate.format(new Date(interest.recorded + "T00:00:00Z"))
+    : "Recording date unavailable";
+  detail.replaceChildren(element("h3", interest.topic), element("p", evidence, "accent"), element("p", recorded, "muted"));
+  if (interest.anchors && interest.anchors.length) {
+    detail.append(element("p", "From your interest in " + interest.anchors.join(" · "), "muted"));
+  }
+  if (interest.reason) detail.append(element("p", interest.reason));
+}
+
+function createPoint(item, index, size) {
+  const radii = { stated: [156, 113], tentative: [245, 191], possibility: [288, 228] }[item.kind];
+  const angle = -Math.PI / 2 + (item.kind === "stated" ? .18 : -.18) + index * 2 * Math.PI / size;
+  const x = 320 + Math.cos(angle) * radii[0];
+  const y = 260 + Math.sin(angle) * radii[1];
+  const point = svg("g", { transform: `translate(${x} ${y})`, class: "node", role: "button", tabindex: "0",
+    "data-kind": item.kind, "aria-label": item.topic + ", " + item.kind });
+  const title = svg("title", {});
+  title.textContent = item.topic;
+  const marker = item.kind === "possibility"
+    ? svg("path", { d: "M0 -6L6 0L0 6L-6 0Z", class: "point" })
+    : svg("circle", { r: 4.6, class: "point" });
+  point.append(title, svg("circle", { r: 15, fill: "transparent" }), svg("circle", { r: 11, class: "halo" }), marker);
+  point.addEventListener("click", () => choose(item));
+  point.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      choose(item);
+    }
+  });
+  return point;
+}
+
+function renderInterests() {
+  const query = search.value.trim().toLocaleLowerCase();
+  const matches = interests.filter((item) => (kind.value === "all" || item.kind === kind.value)
+    && item.topic.toLocaleLowerCase().includes(query));
+  const last = Math.max(0, Math.ceil(matches.length / pageSize) - 1);
+  page = Math.min(page, last);
+  const start = page * pageSize;
+  const shown = matches.slice(start, start + pageSize);
+  const rings = {
+    stated: shown.filter((item) => item.kind === "stated"),
+    tentative: shown.filter((item) => item.kind === "tentative"),
+    possibility: shown.filter((item) => item.kind === "possibility"),
+  };
+  const ringIndex = { stated: 0, tentative: 0, possibility: 0 };
+  get("map-count").textContent = number.format(shown.length);
+  get("pager").hidden = last === 0;
+  get("pager-status").textContent = `${start + 1}–${start + shown.length} of ${number.format(matches.length)}`;
+  previous.disabled = page === 0;
+  next.disabled = page === last;
+  nodeLayer.replaceChildren();
+  indexList.replaceChildren();
+  controls = [];
+  for (const item of shown) {
+    const point = createPoint(item, ringIndex[item.kind]++, rings[item.kind].length);
+    const button = element("button");
+    button.type = "button";
+    button.setAttribute("aria-label", item.topic + ", " + item.kind);
+    const dot = element("span", undefined, `dot ${item.kind}`);
+    dot.setAttribute("aria-hidden", "true");
+    button.append(dot, element("span", item.topic));
+    button.addEventListener("click", () => choose(item));
+    const row = element("li");
+    row.append(button);
+    indexList.append(row);
+    nodeLayer.append(point);
+    controls.push([item, point, button]);
+  }
+  if (!shown.length) {
+    indexList.append(element("li", interests.length ? "No interests match these filters." : "Your atlas has no interests on record yet.", "empty"));
+  }
+  choose(shown.includes(selected) ? selected : null);
+}
+
+for (const control of [search, kind]) {
+  control.addEventListener("input", () => { page = 0; renderInterests(); });
+}
+previous.addEventListener("click", () => { page--; renderInterests(); });
+next.addEventListener("click", () => { page++; renderInterests(); });
+renderInterests();
+
+const activity = get("activity");
+const activityDetail = get("activity-detail");
+const activityButtons = [];
+const maxActivity = data.months.reduce((max, month) => Math.max(max, month.suggestions, month.feedback), 1);
+function chooseMonth(index) {
+  for (const [i, button] of activityButtons.entries()) button.setAttribute("aria-pressed", String(i === index));
+  const month = data.months[index];
+  activityDetail.textContent = shortMonth.format(new Date(month.month + "-01T00:00:00Z")) +
+    " · " + number.format(month.suggestions) + (month.suggestions === 1 ? " suggestion" : " suggestions") +
+    " · " + number.format(month.feedback) + (month.feedback === 1 ? " feedback entry" : " feedback entries");
+}
+for (const [index, month] of data.months.entries()) {
+  const button = element("button", undefined, "month");
+  const label = shortMonth.format(new Date(month.month + "-01T00:00:00Z"));
+  button.type = "button";
+  button.setAttribute("aria-label", `${label}, ${number.format(month.suggestions)} suggestions, ${number.format(month.feedback)} feedback entries`);
+  const bars = element("span", undefined, "bars");
+  bars.setAttribute("aria-hidden", "true");
+  for (const series of ["suggestions", "feedback"]) {
+    const bar = element("span", undefined, `bar ${series}`);
+    bar.style.height = `${month[series] / maxActivity * 100}%`;
+    bars.append(bar);
+  }
+  button.append(bars, element("span", label, "month-label"));
+  button.addEventListener("click", () => chooseMonth(index));
+  activity.append(button);
+  activityButtons.push(button);
+}
+if (activityButtons.length) {
+  activity.hidden = false;
+  chooseMonth(activityButtons.length - 1);
+} else {
+  activityDetail.textContent = "No dated activity on record yet.";
+}
+if (data.undated.suggestions || data.undated.feedback) {
+  get("undated").textContent = "Undated records are included in the totals above.";
+}
+
+// A private, offline view of current content facts and separately recorded reasoning.
+const connections = data.connections || { status: "missing", works: [] };
+const graphNodes = new Map((connections.nodes || []).map((node) => [node.id, node]));
+const graphEdges = new Map((connections.edges || []).map((edge) => [edge.id, edge]));
+const graphSources = new Map((connections.sources || []).map((source) => [source.id, source]));
+const graphAnchors = new Map((connections.anchors || []).map((anchor) => [anchor.id, anchor]));
+const workSearch = get("work-search");
+const workFilter = get("work-filter");
+const workList = get("work-list");
+const routeList = get("connection-routes");
+const connectionMap = get("connection-map");
+const connectionDetail = get("connection-detail");
+const allWorks = [...(connections.works || [])].sort((a, b) =>
+  Number(b.recommended) - Number(a.recommended)
+  || String(b.recommended_at || "").localeCompare(String(a.recommended_at || ""))
+  || (b.routes || []).length - (a.routes || []).length
+  || a.label.localeCompare(b.label));
+let activeWork = null;
+let activeConnection = null;
+let connectionRows = [];
+let connectionControls = [];
+
+function safeWebURL(value) {
+  if (typeof value !== "string") return null;
+  try {
+    const url = new URL(value);
+    return ["https:", "http:"].includes(url.protocol) ? url.href : null;
+  } catch (_) { return null; }
+}
+
+function displayDate(value) {
+  const parsed = typeof value === "string" ? new Date(value) : new Date(NaN);
+  return Number.isNaN(parsed.getTime()) ? null : longDate.format(parsed);
+}
+
+function nodeLabel(id) { return (graphNodes.get(id) || {}).label || "Unknown content record"; }
+function anchorLabel(id) { return (graphAnchors.get(id) || {}).label || "Unmatched interest"; }
+
+function factSentence(edge) {
+  const source = nodeLabel(edge.source);
+  const target = nodeLabel(edge.target);
+  const joins = { about: "covers", in_genre: "is classified as", created_by: "was created by", has_quality: "has the quality", broader_than: "is broader than", related_to: "is related to" };
+  return `${source} ${joins[edge.relation] || "connects to"} ${target}.`;
+}
+
+function appendFact(parent, edge) {
+  const block = element("div", undefined, "fact");
+  block.append(element("h4", factSentence(edge)));
+  if (edge.support_note) block.append(element("p", edge.support_note));
+  const sources = element("ul", undefined, "source-list");
+  for (const id of edge.source_provenance || []) {
+    const source = graphSources.get(id);
+    if (!source) continue;
+    const item = element("li");
+    const url = safeWebURL(source.locator);
+    if (url) {
+      const link = element("a", source.title || "View source");
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      item.append(link);
+    } else item.append(element("span", source.title || "Source record"));
+    const checked = displayDate(source.checked_at);
+    item.append(element("small", checked ? "Source checked " + checked : "Check date unavailable"));
+    sources.append(item);
+  }
+  block.append(sources);
+  parent.append(block);
+}
+
+function selectConnection(row, edgeId) {
+  activeConnection = row;
+  get("connection-show-facts").setAttribute("aria-pressed", String(!row && !!activeWork));
+  for (const [key, control] of connectionControls) control.setAttribute("aria-pressed", String(key === row));
+  connectionDetail.replaceChildren();
+  if (!activeWork) return;
+  if (!row) {
+    connectionDetail.append(element("p", "Content facts", "micro accent"));
+    const ids = activeWork.edge_ids || [...graphEdges.values()].filter((edge) => edge.source === activeWork.id || edge.target === activeWork.id).map((edge) => edge.id);
+    if (!ids.length) connectionDetail.append(element("p", "No verified relationships are available for this work yet.", "muted"));
+    for (const id of ids) {
+      const edge = graphEdges.get(id);
+      if (edge) appendFact(connectionDetail, edge);
+    }
+    return;
+  }
+  if (row.kind === "sourced" || row.kind === "mapping") {
+    connectionDetail.append(element("p", row.edge_ids.length ? "Sourced path · current graph" : "Direct interest match", "micro accent"));
+    connectionDetail.append(element("h4", row.label));
+    if (!row.edge_ids.length) {
+      connectionDetail.append(element("p", "This work is mapped to a recorded interest. The mapping is personal context, rather than a sourced relationship between two content records."));
+    } else {
+      connectionDetail.append(element("p", "Each relationship below retains its original direction. Following the path does not establish that you enjoyed this work.", "muted"));
+      const ids = edgeId ? [edgeId] : row.edge_ids;
+      for (const id of ids) {
+        const edge = graphEdges.get(id);
+        if (edge) appendFact(connectionDetail, edge);
+      }
+    }
+  } else {
+    const isHypothesis = row.kind === "hypothesis";
+    connectionDetail.append(element("p", isHypothesis ? "Tentative taste hypothesis" : "Recorded recommendation reasoning", "micro " + (isHypothesis ? "" : "accent")));
+    connectionDetail.append(element("h4", row.label));
+    connectionDetail.append(element("p", "From: " + row.anchor_ids.map(anchorLabel).join(" · "), "muted"));
+    if (row.reason) connectionDetail.append(element("p", row.reason));
+    connectionDetail.append(element("p", isHypothesis ? "This proposed explanation remains tentative. Your feedback can strengthen, narrow or reject it." : "This is the recorded reason for suggesting the work. It does not establish enjoyment or a new lasting preference.", "connection-notice"));
+  }
+}
+
+function keyboardAction(node, callback) {
+  node.addEventListener("click", callback);
+  node.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); callback(); }
+  });
+}
+
+function wrapLabel(label, maxCharacters, maxLines) {
+  const words = String(label).split(/\s+/).flatMap((word) => word.length > maxCharacters ? word.match(new RegExp(`.{1,${maxCharacters}}`, "gu")) || [] : [word]);
+  const lines = [];
+  let line = "";
+  for (const word of words) {
+    if (line && (line + " " + word).length > maxCharacters) { lines.push(line); line = word; }
+    else line = line ? line + " " + word : word;
+  }
+  if (line) lines.push(line);
+  if (lines.length > maxLines) {
+    const result = lines.slice(0, maxLines);
+    result[maxLines - 1] = result[maxLines - 1].replace(/[.,;:]$/, "") + "…";
+    return result;
+  }
+  return lines;
+}
+
+function mapCard(x, centreY, width, heading, label, style, callback, row, maxLines = 4) {
+  const lines = wrapLabel(label, Math.floor(width / 8.3), maxLines);
+  const height = 43 + lines.length * 20;
+  const y = centreY - height / 2;
+  const group = svg("g", { class: "connection-node " + style, role: "button", tabindex: "0", "aria-label": heading + ": " + label, "aria-pressed": "false" });
+  const title = svg("title", {}); title.textContent = heading + ": " + label;
+  group.append(title, svg("rect", { x, y, width, height, rx: 3 }));
+  const caption = svg("text", { x: x + 13, y: y + 20, class: "node-heading" }); caption.textContent = heading.toLocaleUpperCase(); group.append(caption);
+  const text = svg("text", { x: x + 13, y: y + 42, class: "node-title" });
+  lines.forEach((line, index) => { const span = svg("tspan", { x: x + 13, dy: index ? 20 : 0 }); span.textContent = line; text.append(span); });
+  group.append(text);
+  keyboardAction(group, callback);
+  connectionControls.push([row, group]);
+  return group;
+}
+
+function mapLine(x1, y1, x2, y2, row, edgeId) {
+  const edge = graphEdges.get(edgeId);
+  const titleText = edge ? factSentence(edge) : row.label;
+  const group = svg("g", { class: "connection-path", role: "button", tabindex: "0", "aria-label": titleText, "aria-pressed": "false" });
+  const title = svg("title", {}); title.textContent = titleText;
+  const path = `M${x1} ${y1} C${x1 + (x2-x1)*.5} ${y1},${x1 + (x2-x1)*.5} ${y2},${x2} ${y2}`;
+  group.append(title, svg("path", { d: path, class: "connection-edge " + (row.kind === "sourced" ? "" : row.kind) }), svg("path", { d: path, class: "connection-edge-hit" }));
+  keyboardAction(group, () => selectConnection(row, edgeId));
+  connectionControls.push([row, group]);
+  return group;
+}
+
+function renderConnectionMap() {
+  connectionMap.replaceChildren();
+  const count = connectionRows.length;
+  connectionMap.hidden = !count;
+  if (!count) return;
+  const height = Math.max(300, count * 132 + 64);
+  const centreY = height / 2;
+  connectionMap.setAttribute("viewBox", `0 0 900 ${height}`);
+  const title = svg("title", {});title.textContent = "Connections to " + activeWork.label;
+  const description = svg("desc", {});description.textContent = "Interests on the left lead through source-backed relationships or separately labelled recommendation reasoning to the selected work on the right. The path cards below provide the same connections as text.";
+  connectionMap.append(title, description);
+  const lines = svg("g", {}), cards = svg("g", {});
+  connectionRows.forEach((row, index) => {
+    const y = 98 + index * 132;
+    const isSource = row.kind === "sourced" || row.kind === "mapping";
+    const leftLabel = isSource ? anchorLabel(row.anchor_id) : row.anchor_ids.map(anchorLabel).join(" + ");
+    const interestHeading = isSource && (graphAnchors.get(row.anchor_id) || {}).kind === "tentative" ? "Tentative interest" : "Stated interest";
+    cards.append(mapCard(12, y, 240, isSource ? interestHeading : "Your interests", leftLabel, isSource ? "interest" : row.kind, () => selectConnection(row), row));
+    if (isSource && row.node_ids.length > 2) {
+      const middle = graphNodes.get(row.node_ids[1]);
+      lines.append(mapLine(252, y, 327, y, row, row.edge_ids[0]), mapLine(557, y, 650, centreY, row, row.edge_ids[1]));
+      cards.append(mapCard(327, y, 230, middle ? middle.type : "Content", middle ? middle.label : "Content record", "content", () => selectConnection(row), row));
+    } else if (!isSource) {
+      lines.append(mapLine(252, y, 327, y, row), mapLine(557, y, 650, centreY, row));
+      cards.append(mapCard(327, y, 230, row.kind === "hypothesis" ? "Taste hypothesis" : "Recommendation reason", row.label, row.kind, () => selectConnection(row), row));
+    } else if (row.kind === "mapping") {
+      lines.append(mapLine(252, y, 650, centreY, row));
+      const label = svg("text", { x: 360, y: y - 12, class: "map-label" });label.textContent = "PROFILE MAPPING";cards.append(label);
+    } else {
+      lines.append(mapLine(252, y, 650, centreY, row, row.edge_ids[0]));
+    }
+  });
+  cards.append(mapCard(650, centreY, 238, activeWork.recommended ? "Recommended work" : "Researched work", activeWork.label, "work", () => selectConnection(null), null, 7));
+  connectionMap.append(lines, cards);
+}
+
+function chooseWork(work, preferredAnchor = null) {
+  activeWork = work;
+  connectionRows = [];
+  connectionControls = [];
+  for (const button of workList.querySelectorAll("button")) button.setAttribute("aria-pressed", String(work && button.dataset.workId === work.id));
+  get("connection-work-title").textContent = work ? work.label : "No matching works";
+  get("connection-work-creator").textContent = work ? work.creator || "" : "Try another search or show all researched works.";
+  const link = get("connection-work-link");
+  const url = safeWebURL(work && work.canonical_url);
+  link.hidden = !url;
+  if (url) link.href = url; else link.removeAttribute("href");
+  const date = work && displayDate(work.recommended_at);
+  get("connection-work-status").textContent = work ? (work.recommended ? "Recommended" + (date ? " · " + date : "") : "Researched only · not recorded as a recommendation") : "";
+  get("connection-work-limits").textContent = work && work.routes_truncated ? "Showing a bounded selection of paths. More connections may exist in the graph." : "";
+  const factsCount = work ? (work.edge_ids || [...graphEdges.values()].filter((edge) => edge.source === work.id || edge.target === work.id).map((edge) => edge.id)).length : 0;
+  get("connection-show-facts").textContent = "View sourced facts (" + factsCount + ")";
+  get("connection-show-facts").disabled = !factsCount;
+  routeList.replaceChildren();
+  if (work) {
+    let displayedRoutes = [...(work.routes || [])];
+    const preferred = graphAnchors.get(preferredAnchor);
+    if (preferred && preferred.sample_route && preferred.sample_route.work_id === work.id
+        && !displayedRoutes.some((route) => route.anchor_id === preferredAnchor)) {
+      displayedRoutes = [preferred.sample_route, ...displayedRoutes].slice(0, (connections.limits || {}).max_routes_per_work || 4);
+    }
+    for (const route of displayedRoutes) {
+      const ids = (route.node_ids || []).filter((id) => graphNodes.has(id));
+      const edgeIds = (route.edge_ids || []).filter((id) => graphEdges.has(id));
+      if (!graphAnchors.has(route.anchor_id) || !ids.length) continue;
+      connectionRows.push({ ...route, node_ids: ids, edge_ids: edgeIds, kind: edgeIds.length ? "sourced" : "mapping", label: anchorLabel(route.anchor_id) + (ids.length > 2 ? " → " + nodeLabel(ids[1]) : "") });
+    }
+    for (const link of work.editorial_links || []) {
+      const anchors = (link.anchor_ids || []).filter((id) => graphAnchors.has(id));
+      if (!anchors.length) continue;
+      connectionRows.push({ ...link, anchor_ids: anchors, kind: link.kind === "hypothesis" ? "hypothesis" : "editorial", label: link.label || "Recorded recommendation connection" });
+    }
+    for (const row of connectionRows) {
+      const item = element("li");
+      const button = element("button", undefined, row.kind);
+      button.type = "button";
+      button.setAttribute("aria-pressed", "false");
+      button.append(element("span", row.label, "route-label"), element("span", row.kind === "sourced" ? `${row.edge_ids.length} sourced ${row.edge_ids.length === 1 ? "relationship" : "relationships"}` : row.kind === "mapping" ? "Direct profile mapping" : row.kind === "hypothesis" ? "Tentative taste hypothesis" : "Recorded recommendation reasoning", "route-kind"));
+      button.addEventListener("click", () => selectConnection(row));
+      connectionControls.push([row,button]);
+      item.append(button);routeList.append(item);
+    }
+    if (!connectionRows.length) routeList.append(element("li", "No sourced path or recorded personal connection is available for this work yet. Its verified content facts are shown below.", "empty"));
+  }
+  renderConnectionMap();
+  selectConnection(connectionRows.find((row) => row.anchor_id === preferredAnchor
+    || (row.anchor_ids || []).includes(preferredAnchor)) || connectionRows[0] || null);
+}
+
+function renderWorks() {
+  const query = workSearch.value.trim().toLocaleLowerCase();
+  const shown = allWorks.filter((work) => {
+    const anchorIds = [...(work.connected_anchor_ids || (work.routes || []).map((route) => route.anchor_id)), ...(work.editorial_links || []).flatMap((link) => link.anchor_ids || [])];
+    const searchable = [work.label, work.creator || "", ...anchorIds.map(anchorLabel), ...(work.editorial_links || []).map((link) => link.label || "")].join(" ").toLocaleLowerCase();
+    return (workFilter.value === "all" || (workFilter.value === "recommended" ? work.recommended : !work.recommended)) && searchable.includes(query);
+  });
+  workList.replaceChildren();
+  for (const work of shown) {
+    const row = element("li"), button = element("button");
+    button.type = "button";
+    button.dataset.workId = work.id;
+    button.append(element("span", work.label, "work-name"), element("span", (work.recommended ? "Recommended" : "Researched only") + ((work.routes || []).length ? " · " + (work.routes || []).length + " interest " + ((work.routes || []).length === 1 ? "path" : "paths") : ""), "work-meta"));
+    button.addEventListener("click", () => chooseWork(work));
+    row.append(button);workList.append(row);
+  }
+  get("work-result-count").textContent = `${number.format(shown.length)} ${shown.length === 1 ? "work" : "works"} in view`;
+  const initial = shown.find((work) => work.recommended && (work.routes || []).length >= 2) || shown[0] || null;
+  chooseWork(shown.includes(activeWork) ? activeWork : initial);
+}
+
+const connectionCounts = connections.counts || {};
+get("connection-summary").textContent = connections.status === "available" || connections.status === "empty"
+  ? `${number.format(connectionCounts.nodes || 0)} content records · ${number.format(connectionCounts.edges || 0)} sourced relationships · ${number.format(allWorks.length)} works stored in the graph` : "";
+const hasWorks = connections.status === "available" && allWorks.length > 0;
+get("connection-workspace").hidden = !hasWorks;
+get("connection-empty").hidden = hasWorks;
+get("connection-empty-message").textContent = connections.notice || (connections.status === "invalid" ? "The saved content graph could not be validated. Your taste model and activity remain available below." : "Connections will appear as recommendation research saves verified relationships between works, subjects and creators. Your interests remain available below.");
+const matched = connectionCounts.represented_interests ?? connectionCounts.matched_interests ?? 0;
+const unmatched = connectionCounts.unmatched_interests || 0;
+const sourceConnected = connectionCounts.sourced_interests || 0;
+const recordedConnected = connectionCounts.recorded_interests || 0;
+const hasCoverage = connections.status === "available" || connections.status === "empty";
+get("connection-coverage").textContent = hasCoverage ? `${number.format(matched)} of ${number.format(matched + unmatched)} interests represented · ${number.format(sourceConnected)} with sourced routes to works · ${number.format(recordedConnected)} with recorded recommendation reasons. ` + ((connections.limits || {}).truncated ? "Counts reflect this bounded view; additional works or paths may exist." : "Routes are limited to two relationships.") : "";
+get("connection-mapping-notice").textContent = connections.mapping_notice || "";
+get("interest-coverage").hidden = !graphAnchors.size;
+for (const anchor of graphAnchors.values()) {
+  const row = element("li");
+  row.dataset.anchorId = anchor.id;
+  const sourced = (anchor.sourced_work_ids || []).length;
+  const recorded = (anchor.recorded_work_ids || []).length;
+  const mapped = (anchor.mapped_work_ids || []).length;
+  const statuses = [anchor.node_id ? "Represented" : "Mapping needed"];
+  if (sourced) statuses.push(`${number.format(sourced)} sourced ${sourced === 1 ? "work" : "works"}`);
+  else statuses.push("No sourced route shown");
+  if (mapped) statuses.push(`${number.format(mapped)} direct work ${mapped === 1 ? "mapping" : "mappings"}`);
+  if (recorded) statuses.push(`${number.format(recorded)} ${recorded === 1 ? "work with" : "works with"} recorded reasoning`);
+  const workId = (anchor.sample_route || {}).work_id || (anchor.mapped_work_ids || [])[0] || (anchor.recorded_work_ids || [])[0];
+  const linkedWork = allWorks.find((work) => work.id === workId);
+  const label = element(linkedWork ? "button" : "span", anchor.label, "coverage-label");
+  if (linkedWork) {
+    label.type = "button";
+    label.addEventListener("click", () => {
+      workFilter.value = "all";
+      workSearch.value = "";
+      renderWorks();
+      chooseWork(linkedWork, anchor.id);
+      get("connection-work-title").scrollIntoView({ block: "nearest" });
+    });
+  }
+  row.append(label, element("span", statuses.join(" · "), "coverage-status"));
+  get("interest-coverage-list").append(row);
+}
+if (!allWorks.some((work) => work.recommended)) workFilter.value = "all";
+for (const control of [workSearch, workFilter]) control.addEventListener("input", renderWorks);
+get("connection-show-facts").addEventListener("click", () => selectConnection(null));
+if (hasWorks) renderWorks();
+</script>
+</body>
+</html>

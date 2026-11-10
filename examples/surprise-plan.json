@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "policy_version": "connected_surprise_v1",
+  "mode_requested": "auto",
+  "mode": "surprise",
+  "trigger": "request_intent:surprise",
+  "context": "on_demand",
+  "scope_requested": "auto",
+  "scope": "broad",
+  "seed": 42,
+  "baseline_weights": {
+    "depth": 0.2,
+    "novelty": 0.2,
+    "relevance": 0.15,
+    "surprise": 0.2,
+    "perspective_change": 0.1,
+    "entertainment": 0.15
+  },
+  "target_weights": {
+    "depth": 0.15,
+    "novelty": 0.2,
+    "relevance": 0.25,
+    "surprise": 0.25,
+    "perspective_change": 0.05,
+    "entertainment": 0.1
+  },
+  "effective_weights": {
+    "depth": 0.15864402453506513,
+    "novelty": 0.19292708115843749,
+    "relevance": 0.2688186359183817,
+    "surprise": 0.24969215465979358,
+    "perspective_change": 0.044869126575104744,
+    "entertainment": 0.08504897715321748
+  },
+  "lane_mix": {
+    "familiar": 0.75,
+    "adjacent": 0.25,
+    "distant": 0.0
+  },
+  "selection_policy": {
+    "kind": "connected_surprise_v1",
+    "min_relevance_score": 3.0,
+    "require_personal_connection": true,
+    "max_exploratory_fraction": 0.25,
+    "allow_distant": false
+  },
+  "variation_applied": true,
+  "baseline_changed": false,
+  "rotation_distance_l1": 0.33702158115635045,
+  "constraints": {
+    "request": "surprise me",
+    "credibility_gate": true,
+    "preserve_explicit_constraints": true,
+    "open_exploration_enabled": false,
+    "open_exploration_disabled_for_request": false,
+    "graph_max_hops": 2,
+    "weekly_delivery_enabled": false
+  },
+  "randomness": {
+    "applied": true,
+    "seed": 42,
+    "method": "80% mode target + 20% gamma-normalized draw; connected surprise retains relevance and surprise at least 20%, novelty at least 16%",
+    "strength": 0.2
+  },
+  "warnings": [],
+  "uncertainty": [
+    "Weights are selection priorities, not measured probabilities or guarantees of enjoyment.",
+    "Intent parsing is heuristic; the host agent must preserve medium, time, safety, and other explicit constraints.",
+    "Planning does not research recommendations, update preferences, or authorize scheduled delivery."
+  ]
+}

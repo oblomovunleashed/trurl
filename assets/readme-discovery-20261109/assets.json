@@ -1,0 +1,25 @@
+{
+  "notice": "Public promotional illustrations using selected real interests shared with permission. Hypotheses remain tentative. These are static illustrated views, not screenshots; no raw profile, feedback, identity or provenance records are included.",
+  "assets": [
+    {
+      "path": "curiosity-paths.png",
+      "type": "generated_editorial_illustration",
+      "alt": "Open books send paths across a spare black-and-white atlas landscape toward a small blue doorway.",
+      "caption": "A few curiosities. An unexpected direction.",
+      "method": "Built-in image_gen; prompt saved in hero-prompt.txt."
+    },
+    {
+      "path": "atlas-connections-example.svg",
+      "type": "static_native_svg_product_illustration",
+      "alt": "A Memory Called Empire connects to science fiction through a solid genre path; Mad Men and Red Rising connect through a separate dashed hypothesis about power, status and persuasion.",
+      "caption": "Illustrated Atlas Connections view · selected real interests, shared with permission.",
+      "content_source": "https://www.panmacmillan.com/authors/arkady-martine/a-memory-called-empire/9781529001594"
+    },
+    {
+      "path": "atlas-interests-example.svg",
+      "type": "static_native_svg_product_illustration",
+      "alt": "Eight selected real interests include Lem, AI, learning, history, gongfu tea, advertising, retro games and Papua New Guinea first-contact histories; two red possibilities remain tentative.",
+      "caption": "Illustrated Atlas interest view · selected real interests, shared with permission."
+    }
+  ]
+}

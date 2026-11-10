@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "seed": 1701,
+  "weight_seed": 42,
+  "scope": "broad",
+  "registry_version": "editorial-domains-1",
+  "eligible_pool": [],
+  "registry_used": false,
+  "insufficient_context": false,
+  "selection_policy": {
+    "kind": "connected_surprise_v1",
+    "min_relevance_score": 3.0,
+    "require_personal_connection": true,
+    "max_exploratory_fraction": 0.25,
+    "allow_distant": false
+  },
+  "pool_exclusion_rule": "Connected surprise uses evidenced interest/request anchors, not independent domain draws.",
+  "briefs": [
+    {
+      "id": "brief-01",
+      "lane": "familiar",
+      "field": "information, computation, and representation",
+      "approach": "historical context",
+      "source_family": "museum_or_library",
+      "request_constraint": "surprise me",
+      "interest_evidence": {
+        "id": "synthetic-interest-representation",
+        "topic": "information, computation, and representation",
+        "kind": "explicit",
+        "confidence": 1.0,
+        "knowledge_level": "unknown",
+        "knowledge_evidence": [],
+        "source_provenance": [
+          "synthetic-reader-statement"
+        ],
+        "scope": "fictional example only",
+        "supporting_words": "I am interested in computing and how information is represented."
+      },
+      "instruction": "Develop an unexpected angle within this evidenced interest or current goal."
+    },
+    {
+      "id": "brief-02",
+      "lane": "familiar",
+      "field": "information, computation, and representation",
+      "approach": "original evidence",
+      "source_family": "author_or_publisher",
+      "request_constraint": "surprise me",
+      "interest_evidence": {
+        "id": "synthetic-interest-representation",
+        "topic": "information, computation, and representation",
+        "kind": "explicit",
+        "confidence": 1.0,
+        "knowledge_level": "unknown",
+        "knowledge_evidence": [],
+        "source_provenance": [
+          "synthetic-reader-statement"
+        ],
+        "scope": "fictional example only",
+        "supporting_words": "I am interested in computing and how information is represented."
+      },
+      "instruction": "Develop an unexpected angle within this evidenced interest or current goal."
+    },
+    {
+      "id": "brief-03",
+      "lane": "familiar",
+      "field": "information, computation, and representation",
+      "approach": "methods and mechanisms",
+      "source_family": "original_research",
+      "request_constraint": "surprise me",
+      "interest_evidence": {
+        "id": "synthetic-interest-representation",
+        "topic": "information, computation, and representation",
+        "kind": "explicit",
+        "confidence": 1.0,
+        "knowledge_level": "unknown",
+        "knowledge_evidence": [],
+        "source_provenance": [
+          "synthetic-reader-statement"
+        ],
+        "scope": "fictional example only",
+        "supporting_words": "I am interested in computing and how information is represented."
+      },
+      "instruction": "Develop an unexpected angle within this evidenced interest or current goal."
+    },
+    {
+      "id": "brief-04",
+      "lane": "familiar",
+      "field": "information, computation, and representation",
+      "approach": "critical or contrasting account",
+      "source_family": "journal_or_archive",
+      "request_constraint": "surprise me",
+      "interest_evidence": {
+        "id": "synthetic-interest-representation",
+        "topic": "information, computation, and representation",
+        "kind": "explicit",
+        "confidence": 1.0,
+        "knowledge_level": "unknown",
+        "knowledge_evidence": [],
+        "source_provenance": [
+          "synthetic-reader-statement"
+        ],
+        "scope": "fictional example only",
+        "supporting_words": "I am interested in computing and how information is represented."
+      },
+      "instruction": "Develop an unexpected angle within this evidenced interest or current goal."
+    },
+    {
+      "id": "brief-05",
+      "lane": "adjacent",
+      "field": "information, computation, and representation",
+      "approach": "practitioner perspective",
+      "source_family": "practitioner_or_official_channel",
+      "request_constraint": "surprise me",
+      "interest_evidence": {
+        "id": "synthetic-interest-representation",
+        "topic": "information, computation, and representation",
+        "kind": "explicit",
+        "confidence": 1.0,
+        "knowledge_level": "unknown",
+        "knowledge_evidence": [],
+        "source_provenance": [
+          "synthetic-reader-statement"
+        ],
+        "scope": "fictional example only",
+        "supporting_words": "I am interested in computing and how information is represented."
+      },
+      "instruction": "Find one connected neighboring idea and explain its concrete bridge to this evidenced interest or current goal. Do not replace the anchor with an unrelated registry field."
+    }
+  ],
+  "generation_instruction": "Generate five substantively different candidate directions, not five variations of a bestseller list. Research works from several briefs and source families before ranking. Optional verbalized generation likelihood is uncalibrated and must not be used as enjoyment probability or selection weight.",
+  "warnings": [],
+  "limits": [
+    "The domain registry is a small editorial pool, not a uniform sample of all knowledge.",
+    "Source and constraint checks are supplied by the host; this tool does not verify remote evidence.",
+    "Diversity counts are descriptive metadata proxies, not measures of identity, quality, or enjoyment.",
+    "Personal-connection evidence and relevance scores are supplied judgments, not calibrated enjoyment predictions."
+  ],
+  "profile_changed": false
+}

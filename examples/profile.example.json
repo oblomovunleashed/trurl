@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "person": {
+    "id": "local-user",
+    "display_name": "You"
+  },
+  "updated_at": null,
+  "provenance": [],
+  "coverage": {
+    "scope": "No past conversations reviewed; new provisional profile."
+  },
+  "onboarding": {
+    "status": "not_started",
+    "categories": [],
+    "anchors": [],
+    "context_sources": {
+      "agent_memory": {
+        "permission": "not_asked",
+        "scope": null,
+        "availability": "unknown",
+        "source_provenance": []
+      },
+      "past_chats": {
+        "permission": "not_asked",
+        "scope": null,
+        "availability": "unknown",
+        "source_provenance": []
+      }
+    }
+  },
+  "interests": [],
+  "taste": {
+    "axes_weights": {
+      "depth": 0.16666666666666666,
+      "novelty": 0.16666666666666666,
+      "relevance": 0.16666666666666666,
+      "surprise": 0.16666666666666666,
+      "perspective_change": 0.16666666666666666,
+      "entertainment": 0.16666666666666666
+    },
+    "weights_status": "provisional_equal_weight_default",
+    "weighting_policy": {
+      "mode": "adaptive",
+      "request_intent_overrides": true,
+      "variation_contexts": [
+        "weekly_broad",
+        "repeated_broad_on_demand"
+      ],
+      "preserve_baseline": true
+    },
+    "quality_gate": {
+      "credibility_required": true
+    },
+    "pure_entertainment_allowed": true,
+    "presentation": {
+      "default": "author_title_link_table",
+      "kind": "design_default"
+    },
+    "constraints": []
+  },
+  "discovery": {
+    "lane_mix": {
+      "familiar": 0.75,
+      "adjacent": 0.25,
+      "distant": 0.0
+    },
+    "kind": "design_default_not_user_preference",
+    "graph_max_hops": 2,
+    "open_exploration": {
+      "enabled": false
+    }
+  },
+  "media": {
+    "enabled": [
+      "youtube_video",
+      "book",
+      "scientific_paper",
+      "film",
+      "podcast",
+      "lecture"
+    ],
+    "music_enabled": false
+  },
+  "delivery": {
+    "default_mode": "on_demand",
+    "weekly": {
+      "enabled": false,
+      "onboarding_default_pending": true,
+      "day": "sunday",
+      "time": "20:00",
+      "time_confirmed": false,
+      "timezone": null,
+      "requires_timezone": true
+    }
+  },
+  "controls": {
+    "silence_is_feedback": false,
+    "knowledge_default": "unknown",
+    "feedback_prompt": "optional",
+    "cross_user_isolation": true
+  }
+}

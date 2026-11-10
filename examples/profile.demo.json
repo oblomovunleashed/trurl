@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "person": {
+    "id": "synthetic-demo-reader",
+    "display_name": "Synthetic demo reader"
+  },
+  "updated_at": null,
+  "provenance": [
+    {
+      "id": "synthetic-reader-statement",
+      "kind": "synthetic_fixture",
+      "title": "Fictional reader statement",
+      "locator": "examples/profile.demo.json#/interests/0/supporting_words",
+      "inspected_range": "Synthetic input only",
+      "captured_at": null
+    }
+  ],
+  "coverage": {
+    "scope": "Fictional declared interests for the planner and discovery demos. No real user data or reviewed conversations."
+  },
+  "interests": [
+    {
+      "id": "synthetic-interest-representation",
+      "topic": "information, computation, and representation",
+      "kind": "explicit",
+      "confidence": 1.0,
+      "knowledge_level": "unknown",
+      "knowledge_evidence": [],
+      "source_provenance": [
+        "synthetic-reader-statement"
+      ],
+      "scope": "fictional example only",
+      "supporting_words": "I am interested in computing and how information is represented."
+    }
+  ],
+  "taste": {
+    "axes_weights": {
+      "depth": 0.2,
+      "novelty": 0.2,
+      "relevance": 0.15,
+      "surprise": 0.2,
+      "perspective_change": 0.1,
+      "entertainment": 0.15
+    },
+    "weights_status": "fictional_illustrative_baseline_not_learned_from_a_person",
+    "weighting_policy": {
+      "mode": "adaptive",
+      "request_intent_overrides": true,
+      "variation_contexts": [
+        "weekly_broad",
+        "repeated_broad_on_demand"
+      ],
+      "preserve_baseline": true
+    },
+    "quality_gate": {
+      "credibility_required": true
+    },
+    "pure_entertainment_allowed": true,
+    "presentation": {
+      "default": "author_title_link_table",
+      "kind": "design_default"
+    },
+    "constraints": []
+  },
+  "discovery": {
+    "lane_mix": {
+      "familiar": 0.75,
+      "adjacent": 0.25,
+      "distant": 0.0
+    },
+    "kind": "design_default_not_user_preference",
+    "graph_max_hops": 2,
+    "open_exploration": {
+      "enabled": false
+    }
+  },
+  "media": {
+    "enabled": [
+      "book"
+    ],
+    "music_enabled": false
+  },
+  "delivery": {
+    "default_mode": "on_demand",
+    "weekly": {
+      "enabled": false,
+      "opt_in_required": true,
+      "day": "sunday",
+      "time": "20:00",
+      "time_confirmed": false,
+      "timezone": null,
+      "requires_timezone": true
+    }
+  },
+  "controls": {
+    "silence_is_feedback": false,
+    "knowledge_default": "unknown",
+    "feedback_prompt": "optional",
+    "cross_user_isolation": true
+  },
+  "onboarding": {
+    "status": "ready",
+    "categories": [
+      "book"
+    ],
+    "anchors": [
+      {
+        "id": "synthetic-anchor-representation",
+        "kind": "topic",
+        "value": "information, computation, and representation",
+        "signal": "interested",
+        "scope": "persistent",
+        "source_provenance": [
+          "synthetic-reader-statement"
+        ]
+      }
+    ],
+    "context_sources": {
+      "agent_memory": {
+        "permission": "not_asked",
+        "scope": null,
+        "availability": "unknown",
+        "source_provenance": []
+      },
+      "past_chats": {
+        "permission": "not_asked",
+        "scope": null,
+        "availability": "unknown",
+        "source_provenance": []
+      }
+    }
+  }
+}

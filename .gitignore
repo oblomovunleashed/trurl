@@ -1,0 +1,12 @@
+# Personal state stays local. Public starters live in examples/.
+model/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.DS_Store
+/dist/
+/build/
+
+/artifacts/

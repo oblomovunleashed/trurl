@@ -1,0 +1,62 @@
+name: Validate Trurl
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.13']
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python scripts/package_release.py --check
+      - run: python -m unittest discover -s tests -v
+      - run: python trurl.py demo --seed 42
+      - run: python trurl.py explore --plan examples/surprise-plan.json --profile examples/profile.demo.json --seed 1701 --count 5
+      - run: python trurl.py graph-check --graph examples/graph.example.json
+      - run: python trurl.py frontier --graph examples/graph.example.json --profile examples/profile.graph-demo.json --seed 1701 --count 5
+      - run: python scripts/package_release.py
+
+  macos:
+    name: Tests and installed helpers on macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - run: python -m unittest discover -s tests -v
+      - run: python scripts/host_smoke.py --agent all --output '${{ runner.temp }}/trurl-hosts'
+      - run: python scripts/check_host_evidence.py --evidence '${{ runner.temp }}/trurl-hosts'
+
+  host-bundles:
+    name: Installed helpers (Codex, Claude Code, Pi)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - run: python scripts/host_smoke.py --agent all --output '${{ runner.temp }}/trurl-hosts'
+      - run: python scripts/check_host_evidence.py --evidence '${{ runner.temp }}/trurl-hosts'

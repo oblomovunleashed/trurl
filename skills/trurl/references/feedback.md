@@ -1,0 +1,19 @@
+# Learn from actual feedback
+
+Record the person's actual words, target, scope, source and date in private `model/feedback.jsonl` with `python3 <skill-directory>/scripts/curation.py feedback --signal <signal> --words "<their words>"`. Add `--recommendation-id <id>` for a reaction to one pick, `--kind` for the type of evidence and `--changes <file>` for profile changes already applied. Read [the state contract](state-contract.md) before changing the profile. “Already knew this,” “too introductory,” “more of this” and “not for me” carry different information. Keep curiosity, willingness to try, familiarity, consumption and experienced enjoyment distinct. Delivery, silence, clicks and completion alone imply no enjoyment or dislike.
+
+Use `--source <source-id>` to retain an identifiable original message or profile source. Without it, feedback uses a shared `unlocated-current-conversation` source: it can trigger maintenance and supply explicit confirmation or rejection, but separate unlocated events alone do not establish independent corroboration.
+
+An item reaction updates that item first. Broader topic, creator, quality or expertise claims need wording or independent evidence supporting that scope. A batch-concentration complaint can change how attention is distributed without establishing dislike of the dominant subject. Preserve contradictory evidence and let the latest explicit correction govern. Repeated summaries of one source are not independent corroboration.
+
+Use sources only within existing authorization. For allowed past-chat review, discover relevant chats, then read actual messages before recording observations; retain inspected portions, dates and gaps. Memory summaries remain provisional with their own provenance, and never establish that original messages or full history were inspected. Do not infer sensitive identity traits or turn professional research automatically into a leisure interest. Relevant new explicit interests are independent anchors.
+
+Change persistent baseline weights only when the person comments on the tradeoff or a clear repeated pattern is confirmed. Preserve explicit baselines over inferred ones. For a justified small inferred adjustment, bound each axis change to 0.02 before renormalizing; stronger persistent changes need explicit instruction. This limit does not constrain request-specific effective weights. Keep confidence in [0,1], preserve prior values in the event, and explain each change's evidence. A surprise request or randomized plan is neither durable preference evidence nor schedule opt-in.
+
+Reconcile [hypotheses](taste-hypotheses.md) after meaningful feedback/new interests, run the maintenance planner with `--event feedback`, and complete any due review without manufacturing a proposal. Hypothesis enjoyment/confirmation/rejection evidence retains its original work and scope. Review rejected/retired possibilities before recreating one. Refresh affected [briefs](curators-brief.md) from current sources; their summaries and the Atlas are interpretations, not corroboration.
+
+When evidence is corrected or forgotten, invalidate affected briefs immediately if a replacement is not ready. Fulfill forgetting by removing requested raw evidence and dependent copies, hypothesis interpretations, graph content where relevant, exports and temporary drafts; invalidating a cache alone does not erase its sources. Preserve minimal content-free change metadata where needed. Do not rewrite historical delivery as a new user reaction.
+
+Backfill suggestions only from actual source messages read, preserving original timestamps when known and unknown fields otherwise. Only delivered works enter recommendation history. Keep user feedback separate from assistant reasoning and internal candidates.
+
+Learn from feedback the person volunteers. Ask for feedback only in a workflow they explicitly request or enable, within its scope.

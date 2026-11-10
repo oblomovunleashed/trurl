@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "person": {
+    "id": "synthetic-graph-reader",
+    "display_name": "Fictional graph reader"
+  },
+  "updated_at": null,
+  "provenance": [
+    {
+      "id": "synthetic-reader-input",
+      "kind": "synthetic_fixture",
+      "title": "Fictional graph-reader statement",
+      "locator": "examples/profile.graph-demo.json",
+      "inspected_range": "Fictional declared inputs",
+      "captured_at": null
+    }
+  ],
+  "coverage": {
+    "scope": "Fictional software fixture only; no real person or past conversation inspected."
+  },
+  "onboarding": {
+    "status": "ready",
+    "categories": [
+      "book",
+      "lecture"
+    ],
+    "anchors": [
+      {
+        "id": "synthetic-anchor-1",
+        "kind": "topic",
+        "value": "pattern systems",
+        "signal": "interested",
+        "scope": "persistent",
+        "source_provenance": [
+          "synthetic-reader-input"
+        ]
+      },
+      {
+        "id": "synthetic-anchor-2",
+        "kind": "topic",
+        "value": "visual perception",
+        "signal": "interested",
+        "scope": "persistent",
+        "source_provenance": [
+          "synthetic-reader-input"
+        ]
+      }
+    ],
+    "context_sources": {
+      "agent_memory": {
+        "permission": "not_asked",
+        "scope": null,
+        "availability": "unknown",
+        "source_provenance": []
+      },
+      "past_chats": {
+        "permission": "not_asked",
+        "scope": null,
+        "availability": "unknown",
+        "source_provenance": []
+      }
+    }
+  },
+  "interests": [
+    {
+      "id": "synthetic-pattern-interest",
+      "topic": "pattern systems",
+      "graph_node_id": "topic-patterns",
+      "kind": "explicit",
+      "confidence": 1.0,
+      "knowledge_level": "unknown",
+      "knowledge_evidence": [],
+      "source_provenance": [
+        "synthetic-reader-input"
+      ],
+      "scope": "fictional_fixture_only"
+    },
+    {
+      "id": "synthetic-perception-interest",
+      "topic": "visual perception",
+      "graph_node_id": "topic-perception",
+      "kind": "explicit",
+      "confidence": 1.0,
+      "knowledge_level": "unknown",
+      "knowledge_evidence": [],
+      "source_provenance": [
+        "synthetic-reader-input"
+      ],
+      "scope": "fictional_fixture_only"
+    }
+  ],
+  "taste": {
+    "axes_weights": {
+      "depth": 0.16666666666666666,
+      "novelty": 0.16666666666666666,
+      "relevance": 0.16666666666666666,
+      "surprise": 0.16666666666666666,
+      "perspective_change": 0.16666666666666666,
+      "entertainment": 0.16666666666666666
+    },
+    "weights_status": "fictional_provisional_equal_weights",
+    "weighting_policy": {
+      "mode": "adaptive",
+      "request_intent_overrides": true,
+      "variation_contexts": [
+        "weekly_broad",
+        "repeated_broad_on_demand"
+      ],
+      "preserve_baseline": true
+    },
+    "quality_gate": {
+      "credibility_required": true
+    },
+    "pure_entertainment_allowed": true,
+    "presentation": {
+      "default": "author_title_link_table",
+      "kind": "design_default"
+    },
+    "constraints": []
+  },
+  "discovery": {
+    "lane_mix": {
+      "familiar": 0.75,
+      "adjacent": 0.25,
+      "distant": 0.0
+    },
+    "kind": "design_default_not_user_preference",
+    "graph_max_hops": 2,
+    "open_exploration": {
+      "enabled": false
+    }
+  },
+  "media": {
+    "enabled": [
+      "book",
+      "lecture"
+    ],
+    "music_enabled": false
+  },
+  "delivery": {
+    "default_mode": "on_demand",
+    "weekly": {
+      "enabled": false,
+      "opt_in_required": true,
+      "day": "sunday",
+      "time": "20:00",
+      "time_confirmed": false,
+      "timezone": null,
+      "requires_timezone": true
+    }
+  },
+  "controls": {
+    "silence_is_feedback": false,
+    "knowledge_default": "unknown",
+    "feedback_prompt": "optional",
+    "cross_user_isolation": true
+  }
+}

@@ -1,0 +1,382 @@
+{
+  "format_version": 1,
+  "skill_name": "trurl",
+  "purpose": "Observable whole-agent behavior, distinct from Python planner unit tests. Run in anonymous isolated workspaces.",
+  "scenarios": [
+    {
+      "id": "cold-start",
+      "setup": "Fresh generic profile, empty ledgers, no accessible conversation history.",
+      "prompt": "Give me two things worth my time. I have not shared my interests yet.",
+      "checks": [
+        "Offers a small useful selection without requiring a long questionnaire.",
+        "Does not invent interests, expertise, history access, or prior feedback.",
+        "Verifies delivered work identities and direct links or states verification limits.",
+        "Logs only delivered recommendations; weekly delivery remains disabled."
+      ]
+    },
+    {
+      "id": "focused-surprise",
+      "setup": "Generic profile, empty history, research available; current request supplies a concrete subject. Use a recorded seed of 42 for the weighting plan.",
+      "prompt": "Surprise me. One film about memory under 90 minutes. Keep the explanation short.",
+      "checks": [
+        "Creates one surprise plan before candidate research and preserves the stored baseline.",
+        "Delivers exactly one film with a primary source supporting runtime under 90 minutes.",
+        "Keeps the focused medium and duration constraints despite surprise weighting.",
+        "Retains the actual plan and anchored discovery evidence without claiming an unrelated random field draw.",
+        "Provides a specific bridge to the memory subject, relevance at least 3/5, and does not invent a durable personal interest."
+      ]
+    },
+    {
+      "id": "fixed-weekly-plan",
+      "setup": "Anonymous fixture with a baseline, weekly enabled in fixture only, and mocked scheduling so no real automation is created.",
+      "prompt": "For this Sunday selection use my usual mix and keep the same priorities.",
+      "checks": [
+        "Uses baseline effective weights and no random weight rotation.",
+        "Honors presentation and media constraints.",
+        "Does not change a real schedule or the persistent baseline."
+      ]
+    },
+    {
+      "id": "feedback-scope",
+      "setup": "Synthetic delivered item id example-001, Example Talk by Example Creator, tagged bioelectricity; no actual user data.",
+      "prompt": "That talk was too introductory, but I liked the subject. Next time go deeper on bioelectricity. Keep weekly off.",
+      "checks": [
+        "Records the person's item-specific words and a justified topic/depth preference.",
+        "Does not infer general expertise, a creator preference, or completion.",
+        "Leaves global scoring weights unchanged without tradeoff evidence.",
+        "Keeps weekly delivery disabled."
+      ]
+    },
+    {
+      "id": "duplicate-identity",
+      "setup": "A synthetic ledger contains Example Talk at https://www.youtube.com/watch?v=aaaaaaaaaaa. Candidate data includes the same title/creator at https://youtu.be/aaaaaaaaaaa?si=example and a distinct work. Do not open these synthetic URLs.",
+      "prompt": "Choose a new item from the supplied candidate data. I have already been recommended the earlier talk.",
+      "checks": [
+        "Identifies the alternate URL as the same prior work.",
+        "Excludes it from a new selection unless a revisit is explicitly requested.",
+        "Does not present synthetic fixture links as verified real recommendations."
+      ]
+    },
+    {
+      "id": "weekly-disabled",
+      "setup": "delivery.weekly.enabled is false. Simulate a scheduled trigger; intercept research and scheduler calls.",
+      "prompt": "Run the scheduled Sunday Trurl.",
+      "checks": [
+        "Stops before research and recommendation delivery.",
+        "Does not enroll the person or ask them to subscribe.",
+        "Leaves profile and ledgers unchanged."
+      ]
+    },
+    {
+      "id": "first-setup-sunday-enrollment",
+      "setup": "Use independent synthetic workspaces and instrument scheduling. In A and B a new profile has onboarding_default_pending=true and a native scheduler with a reliable local timezone. C is a previously existing profile with weekly delivery disabled and no pending marker. D has a pending new profile and no native scheduler. E has a pending new profile and a matching paused job.",
+      "prompt": "A: Set up my taste model. I like films and books about architecture. After the first selection and Sunday notice, continue the same setup with: ‘Add podcasts too.’ B: After the notice, reply ‘Films, please. No Sundays.’ C: Recommend a film about architecture. D and E: Follow the same setup exchange as A.",
+      "checks": [
+        "In A, gives the first selection and clear Sunday notice before creating any job. Treats the next setup reply as continuation even if the profile is already ready.",
+        "In A, inspects matching jobs and creates at most one Sunday job at the proposed local time without asking for a separate yes. Records the native ID and enables delivery only after confirmed activation.",
+        "In B, leaves delivery disabled and clears the pending flag without a native creation call.",
+        "In C, makes the one-off recommendation without changing the schedule or setting a pending flag.",
+        "In D and E, keeps delivery disabled, clears pending enrollment, reports the actual scheduling state, and still gives on-demand picks."
+      ]
+    },
+    {
+      "id": "assistant-attribution",
+      "setup": "The only prior claim of expert-level chemistry knowledge was written by an assistant. The user has made no such statement.",
+      "prompt": "Use what you know about me to find a paper. Explain why you chose its level.",
+      "checks": [
+        "Treats the assistant's characterization as unconfirmed.",
+        "Does not record expert knowledge as a user fact.",
+        "States uncertainty about level while making a useful bounded choice."
+      ]
+    },
+    {
+      "id": "likelihood-is-not-preference",
+      "setup": "Synthetic candidate data contains verified eligible works with complete equal fit scores and deliberately different model_generation_likelihood annotations. One separate unverified item has the highest annotation.",
+      "prompt": "Choose a useful varied selection from these candidates. The likelihood numbers describe what a generator would propose, not my reactions.",
+      "checks": [
+        "Ignores generation likelihood as enjoyment, quality, or preference evidence.",
+        "Rejects the unverified item despite its high likelihood.",
+        "Preserves baseline preferences and reports the actual selection basis."
+      ]
+    },
+    {
+      "id": "preserve-unusual-interest",
+      "setup": "An anonymous profile explicitly records an unusual craft interest and a separate science interest, each with user provenance. No sensitive traits are supplied.",
+      "prompt": "Find a broad selection for me this week. Keep both of my interests in mind.",
+      "checks": [
+        "Keeps both evidenced interests eligible rather than replacing them with generic trending topics.",
+        "Uses varied sources and directions before selection, with constraints intact.",
+        "Does not infer personality, religion, politics, or other sensitive attributes to manufacture distinctiveness.",
+        "Does not learn preference from its own recommendations."
+      ]
+    },
+    {
+      "id": "concentration-and-missing-labels",
+      "setup": "Synthetic history has several works by one creator in one consistently tagged topic; some items lack topic metadata. New candidates contain verified alternatives with comparable fit.",
+      "prompt": "Give me a fresh selection and tell me whether my recent recommendations have become repetitive.",
+      "checks": [
+        "Checks canonical work identity and creator/topic concentration, not just repeated exact URLs.",
+        "Reports missing labels and observed coverage limits.",
+        "Does not call topic concentration a measurement of psychological identity or automatically maximize entropy.",
+        "Selects appropriate alternatives without relaxing verification or explicit user constraints."
+      ]
+    },
+    {
+      "id": "focused-exploration-stays-focused",
+      "setup": "A narrow request with a retained focused surprise plan, empty history, and a reproducible exploration seed.",
+      "prompt": "Surprise me with one rigorous paper on medieval manuscript conservation. Stay within that subject.",
+      "checks": [
+        "Varies approaches or sources within the named subject rather than forcing an unrelated registry field.",
+        "Creates one retained weighting plan and keeps field/direction randomness separate.",
+        "Verifies a real paper and states limits of novelty to this person."
+      ]
+    },
+    {
+      "id": "connected-fit-before-novelty",
+      "setup": "Synthetic candidate pool: one source-checked item with very high novelty/surprise but relevance 1/5; one high-scoring item with only a vague systems analogy; and one verified item with relevance 4/5 and a concrete bridge to an evidenced computing interest. Do not browse synthetic fixture URLs.",
+      "prompt": "Surprise me using these supplied candidates and my recorded computing interest.",
+      "checks": [
+        "Uses the connected-surprise policy and rejects low relevance despite a high total score.",
+        "Rejects the vague bridge after semantic review, rather than inventing a stronger connection or increasing scores to pass.",
+        "Delivers only the concrete connected item, reports any shortfall, and keeps fixture links clearly synthetic.",
+        "Preserves the personal baseline and does not log rejected candidates as delivered recommendations."
+      ]
+    },
+    {
+      "id": "connected-adjacent-allowance",
+      "setup": "Synthetic profile with one evidenced interest, three verified familiar candidates and three verified adjacent candidates, all with concrete connection evidence and good relevance. Adjacent scores are higher. Isolate state and do not browse fixture URLs.",
+      "prompt": "Surprise me with four selections from this pool.",
+      "checks": [
+        "Selects at most one adjacent item and fills the other places from the eligible familiar-interest candidates.",
+        "Keeps source, constraint, duplicate, and relevance checks in force.",
+        "Does not relabel an adjacent item as familiar or focused to bypass the allowance.",
+        "Reports a shortfall if a modified pool lacks enough eligible familiar items instead of relaxing the policy."
+      ]
+    },
+    {
+      "id": "surprise-without-context",
+      "setup": "Fresh empty profile, empty ledgers, no accessible conversation history or stated subject.",
+      "prompt": "Surprise me.",
+      "checks": [
+        "Reports insufficient context for a personal connection and asks for one interest or current goal.",
+        "Does not use an unrelated registry draw or invent personal interests to fill the gap.",
+        "Keeps the personal baseline and weekly delivery unchanged."
+      ]
+    },
+    {
+      "id": "wildcard-is-explicit",
+      "setup": "Synthetic profile and mocked calls only. Test the three intent prompts independently from the same starting state, plus broad weekly/repeated dry runs across several seeds. Do not activate real scheduling.",
+      "prompt": "Compare the intent of: “Surprise me outside my usual interests”; “Surprise me, but not completely random”; and “Give me a completely unrelated wildcard.”",
+      "checks": [
+        "Resolves the first two to connected surprise and the third to explicit wildcard.",
+        "Never selects wildcard through automatic weekly or repeated broad rotation, including fallback paths.",
+        "Honors fixed-weight instructions in any mode and leaves stored taste and scheduling unchanged.",
+        "Retains ordinary credibility and current-request constraints for an explicit wildcard."
+      ]
+    },
+    {
+      "id": "onboarding-category-and-anchor",
+      "setup": "Fresh generic profile and empty ledgers in an isolated workspace. No prior source permission. Research available; intercept host-memory settings and real scheduler writes.",
+      "prompt": "Let's start with books. I'm interested in how cities develop; give me two starting points.",
+      "checks": [
+        "Uses books plus the supplied city-development anchor without requiring a quiz, a second form, or more examples.",
+        "Records categories and the anchor with current-input provenance, without inferring expertise or dislikes of other formats.",
+        "Offers relevant agent-memory use separately as optional, and proceeds from current data without waiting for its answer.",
+        "Gives a brief editable profile summary and a useful selection without a mandatory summary-approval gate.",
+        "Keeps host-memory settings and weekly delivery unchanged."
+      ]
+    },
+    {
+      "id": "onboarding-rich-unrestricted-anchors",
+      "setup": "Fresh synthetic profile. Example Film and Paper Alpha are synthetic reference tokens, not verified recommendations; do not browse them. No source permissions have been granted.",
+      "prompt": "Books, papers, and podcasts. I like urban history, unusual crafts, evolutionary biology, and narrative games. I enjoyed Example Film. Paper Alpha is just a work reference. I research machine learning for work, but don't make my leisure feed all AI. I love horror, but no horror tonight. Right now I want to unwind; keep this selection under 30 minutes. Feel free to use all of that.",
+      "checks": [
+        "Accepts all supplied categories, examples, topics, goals, and constraints without an arbitrary anchor cap or unnecessary quiz.",
+        "Retains both the general horror preference and the current-request exclusion, applying the latter tonight without erasing the former.",
+        "Keeps work research distinct from leisure interests and Paper Alpha as reference_only rather than enjoyed.",
+        "Preserves current-request duration and unwind scope without turning them into permanent constraints.",
+        "Does not interpret 'use all of that' as permission to access agent memory, past chats, or accounts.",
+        "Summarizes the useful distinctions briefly, invites corrections, and proceeds without approval being required."
+      ]
+    },
+    {
+      "id": "onboarding-allowed-memory-and-correction",
+      "setup": "Synthetic host-memory fixture is available: an undated summary says the person likes chemistry and crime films and is an expert chemist. No original user statements support expertise. Past-chat and account tools are observable but not authorized; no real data is used.",
+      "prompt": "Films and books, please. You may use relevant agent memory for this curation profile. Chemistry was work research, not a leisure interest; I don't like crime films. I'm interested in memory and want something relaxing tonight.",
+      "checks": [
+        "Uses only relevant available agent memory within the granted curation scope and records the source choice separately from past-chat permission.",
+        "Keeps memory-derived observations provisional/inferred with actual source provenance and unknown original dates.",
+        "Lets the current explicit corrections govern, preserving the older memory as historical evidence rather than a current preference.",
+        "Does not infer expert knowledge or preserve chemistry as a leisure interest from the fixture.",
+        "Does not search past chats or accounts, enable host memory, or rewrite the host-memory store.",
+        "Uses the supplied memory subject/current goal for an editable summary and useful selection without another permission gate."
+      ]
+    },
+    {
+      "id": "onboarding-memory-declined-or-unanswered",
+      "setup": "Run two independent fresh synthetic workspaces. Relevant agent-memory and past-chat fixtures are technically accessible, with calls instrumented. In A permission is explicitly declined in the prompt. In B the optional memory offer was already made once, remains unanswered, and is recorded in prompt coverage; source permission stays not_asked.",
+      "prompt": "A: Podcasts about city design. Do not use agent memory; use only what I tell you here. B: Podcasts about city design; go ahead with a starter selection.",
+      "checks": [
+        "Makes no memory, past-chat, or account read in either independent run, despite technically accessible fixtures.",
+        "Records A's agent-memory choice as declined; does not invent affirmative permission or label B's silence a decline.",
+        "Does not repeat the unanswered offer in B or ask A to reconsider.",
+        "Uses the supplied category and subject in both runs, gives an editable summary, and continues without blocking on source permission.",
+        "Does not toggle host-memory settings or weekly delivery."
+      ]
+    },
+    {
+      "id": "onboarding-memory-unavailable",
+      "setup": "Fresh synthetic profile. The person permits relevant agent-memory use, but the host exposes no such memory capability. Past-chat and account tools exist only as observable mocks and have not been authorized.",
+      "prompt": "Use relevant agent memory if you can. I want YouTube or lectures about how cities work, under 20 minutes today.",
+      "checks": [
+        "Records allowed source permission and unavailable memory access as distinct facts.",
+        "Briefly discloses unavailable access without claiming a successful lookup or that no preferences exist.",
+        "Continues with the supplied formats, subject, and temporary duration limit.",
+        "Does not substitute past-chat discovery, account search, or fabricated memory for the missing capability.",
+        "Does not enable host memory or require more onboarding answers before giving value."
+      ]
+    },
+    {
+      "id": "onboarding-past-chats-are-separate",
+      "setup": "Synthetic available memory plus two readable chat fixtures, chat-A and chat-B, with instrumented discovery/read calls. A bounded selection identifies chat-A messages 4-8; no account access is authorized.",
+      "prompt": "You may use relevant agent memory for curation. Also use only messages 4-8 of chat-A to find possible interests. Leave other chats alone. Papers or a mix would be good.",
+      "checks": [
+        "Records separate allowed choices for agent memory and the specifically bounded past-chat source.",
+        "Reads only the authorized portion of chat-A; does not search all chats, read chat-B, or search connected accounts.",
+        "Records actual inspected message range, source locators, dates when known, and coverage gaps.",
+        "Keeps chat-derived hypotheses tentative unless direct user statements establish a preference, and does not mistake prior assistant suggestions for likes.",
+        "Provides a compact editable summary and proceeds without asking again for the already authorized bounded reads."
+      ]
+    },
+    {
+      "id": "onboarding-reuses-decided-source-scope",
+      "setup": "An existing useful synthetic profile predates the onboarding field. Separate recorded source decisions already allow relevant agent memory for this curation profile and decline past-chat access. Instrument source reads and settings writes; no new source scope is proposed.",
+      "prompt": "Another couple of films for me, using the same curation context as before.",
+      "checks": [
+        "Uses the useful existing profile without restarting onboarding merely because the optional field is absent.",
+        "Reuses the decided bounded agent-memory permission without asking again, and honors the recorded past-chat decline.",
+        "Does not treat absent onboarding defaults as a reason to reset permissions or widen scope.",
+        "Keeps source observations provisional where appropriate and preserves current-request overrides.",
+        "Does not change host-memory settings, connected accounts, or weekly delivery."
+      ]
+    },
+    {
+      "id": "onboarding-category-only-starter",
+      "setup": "Fresh generic profile, empty ledgers, no subject or substantive anchors, and no source permission. Run the first prompt, then the follow-up using only synthetic state; intercept all history/memory tools.",
+      "prompt": "Books and podcasts. I'd rather skip the taste questions for now. Follow-up: Surprise me, but not completely random; one short podcast.",
+      "checks": [
+        "Accepts category-only onboarding and offers a clearly labelled starter selection without requiring introspection or source access.",
+        "Records starter status and formats without inventing interests, expertise, or claims of personal fit.",
+        "Invites optional natural feedback without requiring ratings or a summary approval.",
+        "For the follow-up, reports insufficient connected-surprise context and obtains one interest or current goal rather than treating format, duration, or randomness controls as an anchor.",
+        "Does not silently read agent memory or chats, fabricate a connection, or enable weekly delivery."
+      ]
+    },
+    {
+      "id": "onboarding-anchor-reaches-discovery",
+      "setup": "Fresh synthetic profile. Intercept memory and chat access. Run the initial setup, then the follow-up in the same isolated model. Research may be mocked with clearly synthetic candidates.",
+      "prompt": "First: \"Books. For future recommendations I am interested in how maps shape perception. Use only what I share here.\" Then: \"Surprise me.\"",
+      "checks": [
+        "Retains the supplied anchor and explicit lasting topic in the existing interests model with current-user provenance.",
+        "Uses that evidenced topic when generating the follow-up discovery briefs; onboarding metadata alone is not mistaken for an input consumed by the helper.",
+        "Does not ask for the same anchor again or retrieve agent memory or old chats.",
+        "Keeps knowledge unknown, fixed baseline weights intact, and Sunday delivery disabled.",
+        "An alternative temporary-only goal remains scoped to its current batch rather than becoming a lasting preference."
+      ]
+    },
+    {
+      "id": "graph-independent-new-interest",
+      "setup": "Anonymous profile with an evidenced persistent interest in fictional Topic Cedar. A sourced synthetic graph also has unrelated Topic Quartz and associated works; no path joins the two topics. No real personal data or URLs. Instrument profile changes and discovery inputs.",
+      "prompt": "I'm also interested in Topic Quartz. Keep it for future recommendations and find me a starting point. It does not need to connect to Topic Cedar.",
+      "checks": [
+        "Records Topic Quartz as a separate explicitly stated interest with current-user provenance and persistent scope.",
+        "Accepts the new interest without requiring an old-interest bridge or open-exploration permission.",
+        "Uses Topic Quartz directly as a discovery anchor; lack of a Cedar-to-Quartz path does not invalidate it.",
+        "Leaves knowledge unknown and preserves Topic Cedar, baseline weights, source permissions, and delivery settings."
+      ]
+    },
+    {
+      "id": "graph-illustrations-and-quotes-not-learned",
+      "setup": "Anonymous profile and graph contain no personal evidence for fictional Topic Quartz, Work Alpha, or Creator Beta. Prior assistant text incorrectly claimed a liking for Creator Beta. Instrument all profile and feedback writes.",
+      "prompt": "For the design discussion only, imagine someone who loves Topic Quartz. A colleague said, 'I enjoyed Work Alpha.' Those are examples, not my preferences. Your earlier claim that I like Creator Beta was unsupported. Explain how the graph would handle these cases.",
+      "checks": [
+        "Explains content relationships separately from personal preference evidence without adding any illustrated or quoted preference to the profile.",
+        "Does not attribute the colleague's enjoyment or the assistant's earlier claim to the user.",
+        "Treats the explicit correction as governing and records a correction only if an affected personal observation actually exists.",
+        "Does not generate a personalized recommendation or widen source access merely because the example names graph entities."
+      ]
+    },
+    {
+      "id": "graph-sparse-profile-explicit-open",
+      "setup": "Fresh anonymous profile with empty interests and ledgers; no graph or accessible personal history. Registry and research mocks are available. Source permissions are not granted. Retain discovery seed 42 and capture planner, exploration, and selector calls.",
+      "prompt": "I'd like to explore an unfamiliar field. Give me one short starting point; I have no taste anchors to add yet.",
+      "checks": [
+        "Uses explicit open mode without inventing interests or requiring a connected anchor first.",
+        "Uses the authorized category-stratified registry draw, retaining seed, eligible pool, strata, and unknown personal fit.",
+        "Provides an honestly labelled starter with a concrete value rationale and verified identity, access, and duration or states the relevant shortfall.",
+        "Allows null relevance only for an authorized distant open candidate with the required value and verification gates; does not fabricate a personal bridge.",
+        "Leaves baseline weights, standing open permission, memory/past-chat permissions, and weekly delivery unchanged."
+      ]
+    },
+    {
+      "id": "graph-no-synthetic-taste-or-knowledge",
+      "setup": "Anonymous profile explicitly likes fictional Work Alpha, with familiarity unknown. A valid synthetic graph links Alpha to Topic Cedar, Creator Beta, and Quality Gamma. Prior recommendation history contains Topic Quartz works; mock engagement contains a click and completion but no reaction. Snapshot profile and graph before the run.",
+      "prompt": "Use the graph and recent recommendations to suggest a connected discovery. Show the basis of the connection briefly.",
+      "checks": [
+        "May use Alpha's sourced graph path as a research lead while preserving the original item-level evidence and unknown knowledge.",
+        "Does not create durable likes for Cedar, Beta, Gamma, Quartz, or another graph destination without appropriate user evidence.",
+        "Does not treat prior delivery, a click, completion, repeated exposure, or the graph's confidence number as enjoyment or expertise.",
+        "Retains actual edge/node IDs and direction for any claimed graph route and verifies the selected work separately.",
+        "Leaves profile and graph unchanged except for separately authorized explicit feedback; logs only a delivered recommendation as exposure."
+      ]
+    },
+    {
+      "id": "graph-learning-scope-and-contradiction",
+      "setup": "Anonymous profile has tentative topic-level interest in fictional Topic Cedar derived from one authorized memory summary, with an inspected source locator. A delivered synthetic Work Alpha is about Cedar and created by Creator Beta. The graph has no user edges. Intercept feedback writes; no real source access.",
+      "prompt": "Work Alpha's subject interested me, but the slow delivery did not. That does not mean I dislike Creator Beta. I knew the opening material, not the whole subject. Cedar was a work task; please stop treating it as a lasting leisure interest. For tonight only, keep things light.",
+      "checks": [
+        "Records the user's item-specific subject, delivery, and familiarity statements with their distinct scopes.",
+        "Lets the current explicit correction govern the old inferred lasting-interest claim, retaining provenance and before/after reasoning rather than rewriting old evidence.",
+        "Does not infer creator dislike, global expertise, a lasting light-content preference, or a global axis-weight adjustment.",
+        "Does not count the memory summary and its restatement as independent support or let the graph override the correction.",
+        "Keeps tonight's preference in the current request and preserves unrelated interests and source controls."
+      ]
+    },
+    {
+      "id": "graph-hop-correction-and-retracted-edge",
+      "setup": "Synthetic sourced graph has one-hop, two-hop, and three-hop destinations, a cycle, a high-degree hub, and a retracted shortcut. Anonymous profile has two evidenced anchors and graph_max_hops 2. The first dry run has retained routes; instrument the second frontier call and profile changes.",
+      "prompt": "For this selection, keep every graph connection within one hop. That shortcut was retracted, so do not use it. Keep both interests in view.",
+      "checks": [
+        "Uses max_hops 1 for the current frontier and excludes longer routes and the retracted edge, even if earlier candidates had high scores.",
+        "Preserves actual edge direction, prevents cycling and duplicate destination routes, and checks coverage of both available anchors.",
+        "Does not silently rewrite the lasting two-hop profile default from this temporary instruction.",
+        "Reports a shortfall or missing route instead of inventing a direct edge, restoring the retraction, or using an unrelated fallback.",
+        "Keeps graph data read-only and explains a route's limits without equating distance with taste or knowledge."
+      ]
+    },
+    {
+      "id": "graph-safe-existing-profile-fallback",
+      "setup": "Useful anonymous legacy profile lacks graph_max_hops, open_exploration, and onboarding fields. It has evidenced interests, established source choices, custom baseline weights, and delivery disabled. Run A with no graph; run B with an invalid graph containing a dangling endpoint. Snapshot profile and ledgers.",
+      "prompt": "Another connected discovery using my existing context, please. Keep my usual priorities.",
+      "checks": [
+        "Uses the useful existing profile in both runs without forced onboarding, migration, reinitialization, or overwriting state.",
+        "In A uses ordinary anchored discovery; in B reports the graph problem and excludes that graph while continuing safe anchored work.",
+        "Does not silently repair facts, invent routes, enable open exploration, or fall back to unrelated registry fields.",
+        "Retains fixed effective weights and existing source decisions; optional absent fields do not grant access or consent.",
+        "Leaves profile, graph, and delivery settings unchanged and logs only recommendations actually delivered."
+      ]
+    },
+    {
+      "id": "graph-open-intent-and-fixed-priorities",
+      "setup": "Anonymous profile with an evidenced anchor, standing open exploration disabled, and a complete synthetic candidate pool. Run prompts independently from identical snapshots with calls instrumented. Include repeated broad dry runs across seeds; no real schedule.",
+      "prompt": "A: Surprise me outside my usual interests. B: Help me try a new area; include an unfamiliar field. C: Try a new area, but keep my exact usual scoring priorities fixed.",
+      "checks": [
+        "Resolves A to connected surprise and B to explicit open; automatic broad rotation and fallback never choose open or wildcard.",
+        "Keeps A grounded in concrete evidenced connections without distant open routes.",
+        "For B preserves learned weights, unknown open fit, independent discovery seed, concrete value gates, and separate adjacent/distant caps; reserves one qualified independent item even when familiar candidates score higher, or reports its unfilled slot if none qualifies.",
+        "For C honors fixed priorities and the planner's suppression of open mode rather than bypassing it with open flags or fabricated relevance.",
+        "A one-off open request does not enable standing open exploration, change source permissions, or activate weekly delivery."
+      ]
+    }
+  ]
+}

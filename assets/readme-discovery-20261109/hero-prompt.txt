@@ -1,0 +1,9 @@
+Use case: stylized-concept
+Asset type: wide editorial illustration for the Trurl recommendation skill README
+Primary request: a beautiful, quiet, intelligent editorial image about separate curiosities converging into an unexpected discovery. Three slender paths rise from a few open books and quietly bend into a small luminous blue rectangular doorway in the distance. The scene is an abstract intellectual landscape, with subtle topographical contour lines suggesting an atlas. A few paths meet; one path continues beyond the doorway.
+Style/medium: precise black ink linework and restrained solid shapes, sophisticated modern literary magazine illustration, elegant surreal geometry, exceptionally thoughtful negative space. Original composition.
+Composition/framing: wide landscape, approximately 3:2; image comfortably contained within generous white margins; a small simple composition with scale and depth, no visual clutter.
+Color palette: pure white background, near-black #090909 linework; one very small cobalt blue #2355C6 accent at the doorway. No other colors.
+Materials/textures: clean, crisp ink, no paper texture, no gradients, no shadows.
+Text: none.
+Constraints: no letters, no numbers, no words, no typography, no logo, no watermark, no people, no faces, no neon, no decorative UI, no literal computer network diagram. Books must have blank pages. White dominates the image. Make it restrained, poetic and excellent, suitable beside an elegant monochrome wordmark.

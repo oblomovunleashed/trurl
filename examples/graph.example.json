@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "fixture_notice": "Entirely fictional content graph for software demonstration. No real user interests or verified real works. Do not browse example.invalid links.",
+  "sources": [
+    {
+      "id": "synthetic-notes",
+      "kind": "synthetic_fixture",
+      "locator": "examples/graph.example.json#fictional-notes",
+      "checked_at": "2026-01-01T00:00:00Z",
+      "title": "Fictional relationship notes for a synthetic demonstration"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "topic-patterns",
+      "type": "topic",
+      "label": "pattern systems",
+      "aliases": [
+        "patterns"
+      ]
+    },
+    {
+      "id": "topic-structures",
+      "type": "topic",
+      "label": "structural design"
+    },
+    {
+      "id": "topic-perception",
+      "type": "topic",
+      "label": "visual perception"
+    },
+    {
+      "id": "topic-rhythm",
+      "type": "topic",
+      "label": "rhythmic organization"
+    },
+    {
+      "id": "work-folds",
+      "type": "work",
+      "label": "Example Study of Folded Forms",
+      "canonical_url": "https://example.invalid/fictional/folded-forms"
+    },
+    {
+      "id": "work-atlas",
+      "type": "work",
+      "label": "Example Pattern Atlas",
+      "canonical_url": "https://example.invalid/fictional/pattern-atlas"
+    },
+    {
+      "id": "work-rhythm",
+      "type": "work",
+      "label": "Example Rhythm Demonstration",
+      "canonical_url": "https://example.invalid/fictional/rhythm"
+    },
+    {
+      "id": "creator-example",
+      "type": "creator",
+      "label": "Example Researcher"
+    },
+    {
+      "id": "quality-visual",
+      "type": "quality",
+      "label": "visual explanation"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-pattern-structure",
+      "source": "topic-patterns",
+      "relation": "related_to",
+      "target": "topic-structures",
+      "status": "verified",
+      "confidence": 0.9,
+      "source_provenance": [
+        "synthetic-notes"
+      ],
+      "assertion_method": "synthetic_fixture",
+      "created_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "edge-perception-structure",
+      "source": "topic-perception",
+      "relation": "related_to",
+      "target": "topic-structures",
+      "status": "verified",
+      "confidence": 0.9,
+      "source_provenance": [
+        "synthetic-notes"
+      ],
+      "assertion_method": "synthetic_fixture",
+      "created_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "edge-fold-about",
+      "source": "work-folds",
+      "relation": "about",
+      "target": "topic-structures",
+      "status": "verified",
+      "confidence": 0.9,
+      "source_provenance": [
+        "synthetic-notes"
+      ],
+      "assertion_method": "synthetic_fixture",
+      "created_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "edge-atlas-about",
+      "source": "work-atlas",
+      "relation": "about",
+      "target": "topic-patterns",
+      "status": "verified",
+      "confidence": 0.9,
+      "source_provenance": [
+        "synthetic-notes"
+      ],
+      "assertion_method": "synthetic_fixture",
+      "created_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "edge-rhythm-about",
+      "source": "work-rhythm",
+      "relation": "about",
+      "target": "topic-rhythm",
+      "status": "verified",
+      "confidence": 0.9,
+      "source_provenance": [
+        "synthetic-notes"
+      ],
+      "assertion_method": "synthetic_fixture",
+      "created_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "edge-fold-created",
+      "source": "work-folds",
+      "relation": "created_by",
+      "target": "creator-example",
+      "status": "verified",
+      "confidence": 0.9,
+      "source_provenance": [
+        "synthetic-notes"
+      ],
+      "assertion_method": "synthetic_fixture",
+      "created_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "edge-fold-quality",
+      "source": "work-folds",
+      "relation": "has_quality",
+      "target": "quality-visual",
+      "status": "verified",
+      "confidence": 0.9,
+      "source_provenance": [
+        "synthetic-notes"
+      ],
+      "assertion_method": "synthetic_fixture",
+      "created_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "edge-hypothesis",
+      "source": "topic-structures",
+      "relation": "related_to",
+      "target": "topic-rhythm",
+      "status": "hypothesis",
+      "confidence": 0.4,
+      "source_provenance": [
+        "synthetic-notes"
+      ],
+      "assertion_method": "synthetic_fixture",
+      "created_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "edge-retracted",
+      "source": "topic-perception",
+      "relation": "related_to",
+      "target": "topic-rhythm",
+      "status": "retracted",
+      "confidence": 0.9,
+      "source_provenance": [
+        "synthetic-notes"
+      ],
+      "assertion_method": "synthetic_fixture",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  ]
+}

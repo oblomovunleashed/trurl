@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="768" height="1690" viewBox="0 0 768 1690" role="img" aria-labelledby="title desc">
+  <title id="title">Trurl Sunday edition, Sunday, 8 November 2026</title>
+  <desc id="desc">One pick per category. See the accompanying issue text for the selection and direct links.</desc>
+  <rect x="1" y="1" width="766" height="1688" fill="#FFFFFF" stroke="#E6E6E6" stroke-width="2"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <g transform="translate(44 35) scale(0.132)" fill="#090909"><path d="M0 2H205V40H122V271H82V40H0Z"/><path d="M191 83H231V122C249 93 276 75 317 81V121C310 118 302 117 294 117C256 117 231 142 231 184V271H191Z"/><path d="M335 83H375V186C375 225 385 241 413 241C444 241 468 222 468 184V83H507V271H469V248C451 270 432 277 405 277C357 277 335 248 335 195Z"/><path d="M536 83H576V122C594 93 621 75 656 81V121C649 118 642 117 634 117C600 117 576 142 576 184V271H536Z"/><path d="M675 0H716V271H675Z"/></g>
+    <text x="724" y="60" font-size="15" fill="#2355C6" font-weight="700" letter-spacing="1.6" text-anchor="end">SUNDAY, 8 NOVEMBER 2026</text>
+    <path d="M44 96H724" fill="none" stroke="#E6E6E6" stroke-width="1.5"/>
+    <text x="41" y="183" font-size="68" fill="#090909" font-family="Georgia, Times New Roman, serif" letter-spacing="-2">Sunday edition</text>
+    <text x="44" y="223" font-size="22" fill="#6B6B6B">One pick per category</text>
+    <path d="M44 255H724" fill="none" stroke="#E6E6E6" stroke-width="1.5"/>
+    <text x="44" y="294" font-size="15" fill="#2355C6" font-weight="700" letter-spacing="1.6">BOOK</text>
+    <text x="211" y="297" font-size="29" fill="#090909" font-family="Georgia, Times New Roman, serif">Monday Starts on Saturday</text>
+    <text x="211" y="330" font-size="19" fill="#090909" font-weight="700">Arkady and Boris Strugatsky</text>
+    <text x="211" y="355" font-size="16" fill="#2355C6">256 pages · Gollancz edition</text>
+    <text x="211" y="377" font-size="19" fill="#6B6B6B">A young programmer joins a Soviet research</text>
+    <text x="211" y="402" font-size="19" fill="#6B6B6B">institute where magic, bureaucracy and</text>
+    <text x="211" y="427" font-size="19" fill="#6B6B6B">scientific ambition collide.</text>
+    <path d="M44 461H724" fill="none" stroke="#E6E6E6" stroke-width="1.5"/>
+    <text x="44" y="500" font-size="15" fill="#2355C6" font-weight="700" letter-spacing="1.6">PODCAST</text>
+    <text x="211" y="503" font-size="29" fill="#090909" font-family="Georgia, Times New Roman, serif">Fuchsia Dunlop on the Story</text>
+    <text x="211" y="536" font-size="29" fill="#090909" font-family="Georgia, Times New Roman, serif">of Chinese Food</text>
+    <text x="211" y="569" font-size="19" fill="#090909" font-weight="700">Fuchsia Dunlop · Conversations with Tyler</text>
+    <text x="211" y="594" font-size="16" fill="#2355C6">2023 · 1 hr 42 min</text>
+    <text x="211" y="616" font-size="19" fill="#6B6B6B">Over a banquet, Dunlop and Tyler Cowen</text>
+    <text x="211" y="641" font-size="19" fill="#6B6B6B">discuss Chinese culinary history, regional</text>
+    <text x="211" y="666" font-size="19" fill="#6B6B6B">tastes and the craft of cooking and writing.</text>
+    <path d="M44 700H724" fill="none" stroke="#E6E6E6" stroke-width="1.5"/>
+    <text x="44" y="739" font-size="15" fill="#2355C6" font-weight="700" letter-spacing="1.6">FILM</text>
+    <text x="211" y="742" font-size="29" fill="#090909" font-family="Georgia, Times New Roman, serif">I&#x27;m Your Man</text>
+    <text x="211" y="775" font-size="19" fill="#090909" font-weight="700">Maria Schrader</text>
+    <text x="211" y="800" font-size="16" fill="#2355C6">2021 · German</text>
+    <text x="211" y="822" font-size="19" fill="#6B6B6B">A researcher spends three weeks with a</text>
+    <text x="211" y="847" font-size="19" fill="#6B6B6B">robot designed to be her ideal partner, in a</text>
+    <text x="211" y="872" font-size="19" fill="#6B6B6B">comedy about love and human imperfection.</text>
+    <path d="M44 906H724" fill="none" stroke="#E6E6E6" stroke-width="1.5"/>
+    <text x="44" y="945" font-size="15" fill="#2355C6" font-weight="700" letter-spacing="1.6">YOUTUBE VIDEO</text>
+    <text x="211" y="948" font-size="29" fill="#090909" font-family="Georgia, Times New Roman, serif">Chaozhou’s Style Gongfu Cha</text>
+    <text x="211" y="981" font-size="19" fill="#090909" font-weight="700">Nannuoshan</text>
+    <text x="211" y="1006" font-size="16" fill="#2355C6">2019</text>
+    <text x="211" y="1028" font-size="19" fill="#6B6B6B">A demonstration of gongfu tea brewing in the</text>
+    <text x="211" y="1053" font-size="19" fill="#6B6B6B">Chaozhou tradition.</text>
+    <path d="M44 1087H724" fill="none" stroke="#E6E6E6" stroke-width="1.5"/>
+    <text x="44" y="1126" font-size="15" fill="#2355C6" font-weight="700" letter-spacing="1.6">LECTURE</text>
+    <text x="211" y="1129" font-size="29" fill="#090909" font-family="Georgia, Times New Roman, serif">Roman London’s First Voices</text>
+    <text x="211" y="1162" font-size="19" fill="#090909" font-weight="700">Roger Tomlin · Gresham College</text>
+    <text x="211" y="1187" font-size="16" fill="#2355C6">2017 · 56 min</text>
+    <text x="211" y="1209" font-size="19" fill="#6B6B6B">Deciphered writing tablets reveal the loans,</text>
+    <text x="211" y="1234" font-size="19" fill="#6B6B6B">complaints and business dealings of Roman</text>
+    <text x="211" y="1259" font-size="19" fill="#6B6B6B">Londoners.</text>
+    <path d="M44 1293H724" fill="none" stroke="#E6E6E6" stroke-width="1.5"/>
+    <text x="44" y="1332" font-size="15" fill="#2355C6" font-weight="700" letter-spacing="1.6">PAPER</text>
+    <text x="211" y="1335" font-size="29" fill="#090909" font-family="Georgia, Times New Roman, serif">Cumulative cultural evolution</text>
+    <text x="211" y="1368" font-size="29" fill="#090909" font-family="Georgia, Times New Roman, serif">in the laboratory: An</text>
+    <text x="211" y="1401" font-size="29" fill="#090909" font-family="Georgia, Times New Roman, serif">experimental approach to the</text>
+    <text x="211" y="1434" font-size="29" fill="#090909" font-family="Georgia, Times New Roman, serif">origins of structure in human</text>
+    <text x="211" y="1467" font-size="29" fill="#090909" font-family="Georgia, Times New Roman, serif">language</text>
+    <text x="211" y="1500" font-size="19" fill="#090909" font-weight="700">Simon Kirby, Hannah Cornish and Kenny Smith</text>
+    <text x="211" y="1525" font-size="16" fill="#2355C6">2008 · PNAS · Open access</text>
+    <text x="211" y="1547" font-size="19" fill="#6B6B6B">Invented languages become easier to learn and</text>
+    <text x="211" y="1572" font-size="19" fill="#6B6B6B">more structured as they pass through</text>
+    <text x="211" y="1597" font-size="19" fill="#6B6B6B">successive human learners in laboratory</text>
+    <text x="211" y="1622" font-size="19" fill="#6B6B6B">experiments.</text>
+    <path d="M44 1656H724" fill="none" stroke="#E6E6E6" stroke-width="1.5"/>
+  </g>
+</svg>

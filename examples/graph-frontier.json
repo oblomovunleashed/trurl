@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "seed": 1701,
+  "connected": [
+    {
+      "anchor_id": "synthetic-pattern-interest",
+      "anchor_evidence": {
+        "id": "synthetic-pattern-interest",
+        "topic": "pattern systems",
+        "graph_node_id": "topic-patterns",
+        "kind": "explicit",
+        "confidence": 1.0,
+        "knowledge_level": "unknown",
+        "knowledge_evidence": [],
+        "source_provenance": [
+          "synthetic-reader-input"
+        ],
+        "scope": "fictional_fixture_only"
+      },
+      "destination": {
+        "id": "work-atlas",
+        "type": "work",
+        "label": "Example Pattern Atlas",
+        "canonical_url": "https://example.invalid/fictional/pattern-atlas"
+      },
+      "node_ids": [
+        "topic-patterns",
+        "work-atlas"
+      ],
+      "edge_ids": [
+        "edge-atlas-about"
+      ],
+      "steps": [
+        {
+          "edge_id": "edge-atlas-about",
+          "relation": "about",
+          "source": "work-atlas",
+          "target": "topic-patterns",
+          "traversed_reverse": true
+        }
+      ],
+      "hops": 1,
+      "id": "connected-01",
+      "evidence_confidence_min": 0.9
+    },
+    {
+      "anchor_id": "synthetic-perception-interest",
+      "anchor_evidence": {
+        "id": "synthetic-perception-interest",
+        "topic": "visual perception",
+        "graph_node_id": "topic-perception",
+        "kind": "explicit",
+        "confidence": 1.0,
+        "knowledge_level": "unknown",
+        "knowledge_evidence": [],
+        "source_provenance": [
+          "synthetic-reader-input"
+        ],
+        "scope": "fictional_fixture_only"
+      },
+      "destination": {
+        "id": "topic-structures",
+        "type": "topic",
+        "label": "structural design"
+      },
+      "node_ids": [
+        "topic-perception",
+        "topic-structures"
+      ],
+      "edge_ids": [
+        "edge-perception-structure"
+      ],
+      "steps": [
+        {
+          "edge_id": "edge-perception-structure",
+          "relation": "related_to",
+          "source": "topic-perception",
+          "target": "topic-structures",
+          "traversed_reverse": false
+        }
+      ],
+      "hops": 1,
+      "id": "connected-02",
+      "evidence_confidence_min": 0.9
+    },
+    {
+      "anchor_id": "synthetic-pattern-interest",
+      "anchor_evidence": {
+        "id": "synthetic-pattern-interest",
+        "topic": "pattern systems",
+        "graph_node_id": "topic-patterns",
+        "kind": "explicit",
+        "confidence": 1.0,
+        "knowledge_level": "unknown",
+        "knowledge_evidence": [],
+        "source_provenance": [
+          "synthetic-reader-input"
+        ],
+        "scope": "fictional_fixture_only"
+      },
+      "destination": {
+        "id": "work-folds",
+        "type": "work",
+        "label": "Example Study of Folded Forms",
+        "canonical_url": "https://example.invalid/fictional/folded-forms"
+      },
+      "node_ids": [
+        "topic-patterns",
+        "topic-structures",
+        "work-folds"
+      ],
+      "edge_ids": [
+        "edge-pattern-structure",
+        "edge-fold-about"
+      ],
+      "steps": [
+        {
+          "edge_id": "edge-pattern-structure",
+          "relation": "related_to",
+          "source": "topic-patterns",
+          "target": "topic-structures",
+          "traversed_reverse": false
+        },
+        {
+          "edge_id": "edge-fold-about",
+          "relation": "about",
+          "source": "work-folds",
+          "target": "topic-structures",
+          "traversed_reverse": true
+        }
+      ],
+      "hops": 2,
+      "id": "connected-03",
+      "evidence_confidence_min": 0.9
+    }
+  ],
+  "open": [],
+  "unmatched_anchor_ids": [],
+  "eligible_pool": [],
+  "eligible_strata": {},
+  "registry_version": null,
+  "open_sampling": null,
+  "recent_history_count": 24,
+  "warnings": [
+    "Insufficient eligible graph connections; no unrelated fallback or preference inference was used."
+  ],
+  "limits": [
+    "Graph validation checks supplied structure and provenance, not semantic truth or remote sources.",
+    "Paths support candidate discovery only; they establish neither user preference, familiarity nor causation.",
+    "Edge confidence and the 0.5 traversal threshold are supplied judgments and a retrieval heuristic, not calibrated probabilities.",
+    "Bounded, seeded traversal can omit connections; graph coverage and node degree are not measures of importance.",
+    "Open draws are category-stratified over a finite editorial registry, not uniform over all knowledge; personal fit remains unknown."
+  ],
+  "profile_changed": false,
+  "graph_changed": false
+}

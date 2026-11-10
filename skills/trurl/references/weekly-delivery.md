@@ -1,0 +1,15 @@
+# Weekly Sunday delivery
+
+On-demand curation works independently of scheduling. `delivery.weekly.enabled` records whether a matching native job is active and starts false. A new profile has `delivery.weekly.onboarding_default_pending=true` for one-time default enrollment during profile setup. Installation, a one-off recommendation, and loading an existing profile leave scheduling as it was.
+
+During first profile setup with the pending flag, tell the person Sunday delivery is included where supported, that each edition runs as an ordinary request on their plan, and that “one-off only” skips it. Treat any clear decline, such as “no Sundays”, the same way. Give them a chance to opt out in their next setup reply before creating a job. If they supplied all setup details at once, give a useful selection and the notice first. A reply can continue that setup exchange even if the profile is already `starter` or `ready`. Keep replies solely about memory or past chats separate from enrollment.
+
+After they continue setup without opting out, use the host's native scheduler for Sunday at 20:00 in their local timezone by default. Ask for the timezone only if needed and no reliable value is available. Keep `time_confirmed=false` until the person confirms the exact time. Honor the host's scheduling permissions. Missing or false pending enrollment leaves changes to an explicit request.
+
+Name the job **Trurl Sunday edition**, with the identifier `trurl-sunday-edition` where the host takes one, so that any later session can find it. Give it this self-contained prompt, with the actual root: “Use the trurl skill to make this week’s Sunday edition from the taste model at `<curation-root>`. This is a scheduled run: stop without research or delivery if weekly delivery is disabled in the current profile.”
+
+Inspect matching native jobs before changing anything. A paused job stays paused until the person requests resumption. Set `enabled=true` and record the host's job ID as `delivery.weekly.job_id` only after the host confirms an active job. Clear pending enrollment when the person opts out, the job is active, scheduling is unavailable, a paused job already exists, or a final activation attempt fails. Report the actual outcome and continue on demand when activation is unavailable or unsuccessful.
+
+When Sundays are switched off, set `enabled=false`, clear pending enrollment and pause/stop the matching native job. Say whether the host confirmed the change. Keep delivery in the host's configured destination; this skill authorizes no external messaging.
+
+At each scheduled run, begin with `curation.py start --context weekly`, which reads the **current** profile. If `delivery.weekly.enabled` is false it returns `weekly_delivery_disabled`: stop before research or delivery even when an automation incorrectly remains active. Otherwise use current media/time preferences, check native schedule status when available, and follow the ordinary curation and [Sunday edition](sunday-edition.md) workflow. Let helpers read current ledgers for evidence and duplicate checks; do not load entire batch traces into the model. Log only delivered works.
