@@ -5,7 +5,7 @@
   </picture>
 </h1>
 
-<h3 align="center">Your agent, with taste.</h3>
+<h3 align="center">Your agent, your taste.</h3>
 
 <p align="center">
   Turn your agent into a personal curator aligned to your interests, tastes and explorations.<br>
