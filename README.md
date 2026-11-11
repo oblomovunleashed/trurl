@@ -16,7 +16,7 @@
   <a href="#get-started">Get started</a> · <a href="#try-asking">Try asking</a> · <a href="#sunday-edition">Sunday edition</a> · <a href="#see-your-taste-atlas">Taste Atlas</a> · <a href="#how-it-learns">How it learns</a> · <a href="#the-research-behind-trurl">Research</a>
 </p>
 
-Trurl proactively builds a taste model that grows with you, in plain files you own. It draws on what you share: your interests, what you've already encountered and what you've enjoyed. You can start with one curiosity, but a whole brain dump and memory will produce the best results. Come back for a film tonight, a deeper read or a direction you haven't explored before.
+Trurl proactively builds a taste model that grows with you, in plain files you own. It draws on what you share: your interests, what you've already encountered and what you've enjoyed. You can start with one curiosity, but a whole brain dump and memory will produce the best results. Come back for a film tonight, a deeper read or a direction you haven't explored before. Trurl uses seeded variation to explore different research directions and move beyond the same familiar recommendations. It is designed to counter **mode collapse**—AI’s tendency to converge on predictable answers—by broadening the search before checking each pick against your interests, constraints and reliable sources.
 
 <p align="center">
   <a href="assets/readme-discovery-20261109/atlas-interests-example.svg"><img src="assets/readme-discovery-20261109/atlas-interests-example.svg" alt="Eight selected real interests include Lem, AI, learning, history, gongfu tea, advertising, retro games and Papua New Guinea first-contact histories; two red possibilities remain tentative." width="960"></a>
