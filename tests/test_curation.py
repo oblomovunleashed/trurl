@@ -251,6 +251,39 @@ class WeightPlanTests(unittest.TestCase):
                 self.assertEqual(plan["scope"], "broad")
                 self.assertEqual(plan["trigger"], "weekly_broad_rotation")
 
+    def test_generic_single_pick_requests_are_broad_without_a_subject(self):
+        requests = ("Give me one recommendation", "Give me 1 recommendation", "one book", "1 book",
+                    "Please recommend a book", "Could you recommend one paper?", "One film",
+                    "One podcast", "one lecture", "two books")
+        for request in requests:
+            for context in ("on_demand", "weekly"):
+                with self.subTest(request=request, context=context):
+                    before = copy.deepcopy(self.profile)
+                    plan = curation.make_plan(self.profile, request, context=context, seed=42)
+                    self.assertEqual(plan["scope"], "broad")
+                    self.assertEqual(plan["constraints"]["request"], request)
+                    self.assertEqual(self.profile, before)
+
+    def test_single_pick_subjects_and_explicit_controls_keep_their_meaning(self):
+        for request in ("Give me one book about tea", "One recommendation on urban history",
+                        "Recommend one book QFT", "One paper under 20 minutes"):
+            with self.subTest(request=request):
+                plan = curation.make_plan(self.profile, request, context="weekly", repeat_count=5, seed=42)
+                self.assertEqual(plan["scope"], "focused")
+                self.assertFalse(plan["variation_applied"])
+                self.assertEqual(plan["constraints"]["request"], request)
+        request = "Give me one recommendation"
+        focused = curation.make_plan(self.profile, request, scope="focused", context="weekly", seed=42)
+        self.assertEqual(focused["scope"], "focused")
+        self.assertFalse(focused["variation_applied"])
+        wildcard = curation.make_plan(self.profile, request, mode="wildcard", seed=42)
+        self.assertEqual(wildcard["mode"], "wildcard")
+        fixed = curation.make_plan(self.profile, request, context="weekly", fixed=True, seed=42)
+        self.assertEqual(fixed["scope"], "broad")
+        self.assertEqual(fixed["mode"], "personal")
+        self.assertFalse(fixed["variation_applied"])
+        self.assertEqual(fixed["effective_weights"], curation.normalize_weights(self.profile["taste"]["axes_weights"]))
+
     def test_open_surprise_draws_broadly_but_constraints_stay_focused(self):
         broad = curation.make_plan(self.profile, "Surprise me!", seed=42)
         self.assertEqual(broad["scope"], "broad")

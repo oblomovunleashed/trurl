@@ -86,6 +86,63 @@ class HypothesisMaintenanceTests(unittest.TestCase):
         self.assertTrue(self.check()["completed"])
         self.assertFalse(self.review()["review_due"])
 
+    def test_focused_first_review_can_complete_and_reuse_an_empty_pool(self):
+        plan = {"scope": "focused", "mode": "personal"}
+        review = self.review(plan)
+        self.assertTrue(review["eligible"])
+        self.assertEqual(review["triggers"], ["first_review"])
+        before = (self.root / "model/profile.json").read_bytes()
+        self.complete(review)
+        receipt = (self.root / "model/hypothesis-maintenance.json").read_bytes()
+        for _ in range(3):
+            checked = self.check(plan)
+            self.assertTrue(checked["completed"])
+            self.assertFalse(checked["review_due"])
+            self.assertEqual(checked["receipt"]["outcome"], "no_proposal")
+        self.assertEqual((self.root / "model/profile.json").read_bytes(), before)
+        self.assertEqual((self.root / "model/hypothesis-maintenance.json").read_bytes(), receipt)
+
+    def test_focused_review_reopens_for_original_sources_and_meaningful_feedback(self):
+        plan = {"scope": "focused", "mode": "personal"}
+        self.complete(self.review(plan))
+        profile = self.read_profile()
+        profile["provenance"][0]["locator"] = "synthetic corrected original message"
+        self.write_profile(profile)
+        changed = self.review(plan)
+        self.assertEqual(changed["triggers"], ["anchors_changed"])
+        self.complete(changed)
+        self.add_feedback()
+        changed = self.review(plan)
+        self.assertEqual(changed["triggers"], ["feedback_changed"])
+        self.complete(changed)
+        self.assertFalse(self.review(plan)["review_due"])
+
+    def test_focused_review_ignores_pool_only_changes_but_broad_review_retains_them(self):
+        plan = {"scope": "focused", "mode": "personal"}
+        self.save_hypotheses(("h1", "h2"))
+        self.complete(self.review(plan), outcome="reviewed", ids=["h1", "h2"])
+        receipt = self.check(plan)["receipt"]["id"]
+        self.history.append({"id": "r1", "title": "Synthetic probe", "hypothesis_id": "h1"})
+        self.write_ledgers()
+        self.assertFalse(self.review(plan)["review_due"])
+        self.assertEqual(self.check(plan)["receipt"]["id"], receipt)
+        self.assertIn("low_untried_pool", self.review()["triggers"])
+        self.save_hypotheses(("h3",))
+        self.assertFalse(self.review(plan)["review_due"])
+        self.assertIn("pool_changed", self.review()["triggers"])
+
+    def test_focused_invalid_record_can_be_repaired_with_a_saved_hypothesis(self):
+        plan = {"scope": "focused", "mode": "personal"}
+        (self.root / "model/hypothesis-maintenance.json").write_text("{broken")
+        review = self.review(plan)
+        self.assertEqual(review["triggers"], ["invalid_record"])
+        self.save_hypotheses()
+        self.complete(review, outcome="saved", ids=["h1"])
+        checked = self.check(plan)
+        self.assertTrue(checked["completed"])
+        self.assertEqual(checked["receipt"]["hypothesis_ids"], ["h1"])
+        self.assertEqual(self.read_profile()["taste_hypotheses"][0]["status"], "testing")
+
     def test_no_proposal_receipt_reuses_an_unchanged_empty_pool(self):
         self.complete()
         receipt_path = self.root / "model/hypothesis-maintenance.json"
@@ -308,8 +365,8 @@ class HypothesisMaintenanceTests(unittest.TestCase):
             self.complete(second)
         self.assertEqual((self.root / "model/hypothesis-maintenance.json").read_bytes(), before)
 
-    def test_focused_wildcard_and_anchorless_requests_are_not_gated(self):
-        for plan in ({"scope": "focused", "mode": "personal"},
+    def test_wildcard_and_anchorless_requests_are_not_gated(self):
+        for plan in ({"scope": "focused", "mode": "wildcard"},
                      {"scope": "broad", "mode": "wildcard"}):
             with self.subTest(plan=plan):
                 review = self.review(plan)
@@ -408,9 +465,11 @@ class HypothesisMaintenanceTests(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, completed.stderr)
         self.assertTrue(json.loads(completed.stdout)["completed"])
         plan_path.write_text(json.dumps({"scope": "focused", "mode": "personal"}))
-        ineligible = subprocess.run(command, capture_output=True, text=True, check=False)
-        self.assertEqual(ineligible.returncode, 0, ineligible.stderr)
-        self.assertFalse(json.loads(ineligible.stdout)["eligible"])
+        focused = subprocess.run(command, capture_output=True, text=True, check=False)
+        self.assertEqual(focused.returncode, 0, focused.stderr)
+        self.assertTrue(json.loads(focused.stdout)["completed"])
+        self.assertEqual(json.loads(focused.stdout)["receipt"]["id"],
+                         json.loads(completed.stdout)["receipt"]["id"])
 
 
 if __name__ == "__main__":

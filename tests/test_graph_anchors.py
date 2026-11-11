@@ -295,6 +295,9 @@ class GraphAnchorTests(unittest.TestCase):
     def test_custom_explore_graph_remains_read_only(self):
         plan = {"scope": "focused", "mode": "personal", "lane_mix": {"familiar": 1, "adjacent": 0, "distant": 0},
                 "constraints": {"request": "Synthetic research"}}
+        review = HYPOTHESES["maintenance_plan"](self.root, plan)
+        HYPOTHESES["complete_maintenance"](
+            self.root, review, "no_proposal", "Reviewed the supplied interest; no further proposal is supported.")
         plan_path, graph_path = self.root / "plan.json", self.root / "custom-graph.json"
         plan_path.write_text(json.dumps(plan))
         graph_path.write_text(json.dumps(GRAPH["empty_graph"]()))

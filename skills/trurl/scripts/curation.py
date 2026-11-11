@@ -155,6 +155,7 @@ def _resolve_scope(request, context, requested_scope):
 
     Unrecognized language is focused. A small known broad vocabulary prevents a
     generic phrase followed by an unrecognized named subject from rotating.
+    A requested quantity alone does not narrow the subject of a selection.
     """
     if requested_scope != "auto":
         return requested_scope
@@ -175,15 +176,18 @@ def _resolve_scope(request, context, requested_scope):
            for intent, pattern in INTENTS):
         return "broad"
     broad_signal = re.search(
-        r"\b(?:recommendations|selection|curation|ideas|discoveries|idea stimulation|things worth (?:my |the )?time|something interesting)\b|\b(?:a few|some|several) (?:videos|books|papers|films)\b",
+        r"\b(?:recommendations?|selection|curation|ideas|discoveries|idea stimulation|things worth (?:my |the )?time|something interesting)\b|"
+        r"\b(?:a few|a|an|some|several|one|two|three|four|five|six|seven|eight|nine|ten|\d+) "
+        r"(?:videos?|books?|papers?|films?|podcasts?|lectures?)\b",
         text,
     )
     vocabulary = set((
-        "a an few some several recommendations recommendation selection curation ideas idea discoveries "
+        "a an few some several one two three four five six seven eight nine ten "
+        "recommendations recommendation selection curation ideas idea discoveries "
         "stimulation things worth my the time something interesting new worthwhile personal weekly sunday "
         "week this weeks for me please give show pick prepare make suggest recommend curate can could you "
         "i want would like to see explore discover anything broad mix different topics fields across "
-        "disciplines of and videos books papers films"
+        "disciplines of and video videos book books paper papers film films podcast podcasts lecture lectures"
     ).split())
     words = set(re.findall(r"[a-z]+", text))
     return "broad" if broad_signal and words <= vocabulary else "focused"
@@ -319,7 +323,7 @@ def make_plan(profile, request="", context="on_demand", mode="auto", seed=None,
         "context": context,
         "scope_requested": scope,
         "scope": resolved_scope,
-        "hypothesis_maintenance_required": resolved_scope == "broad" and chosen != "wildcard",
+        "hypothesis_maintenance_required": chosen != "wildcard",
         "graph_update_required": True,
         "seed": actual_seed,
         "baseline_weights": baseline,

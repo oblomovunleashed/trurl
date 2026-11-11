@@ -4,13 +4,15 @@ Use this workflow proactively after onboarding, when meaningful personal evidenc
 
 ## Check and complete maintenance
 
-After retaining the request's scoring plan, check maintenance before broad candidate research and save the returned review in the private workspace. `curation.py start` runs this check and saves a due review as `maintenance-review.json` in its working folder; the command below runs it alone.
+After retaining the request's scoring plan, check for required profile or broad-discovery maintenance before candidate research and save the returned review in the private workspace. `curation.py start` runs this check and saves a due review as `maintenance-review.json` in its working folder; the command below runs it alone.
 
 ```sh
 python3 <skill-directory>/scripts/curation.py hypotheses maintenance-plan --root <curation-root> --plan <request-plan.json>
 ```
 
-For onboarding or newly recorded interests/feedback outside a broad selection, use `--event onboarding` or `--event feedback` instead of `--plan`. A focused or wildcard selection needs no broad maintenance review, and a profile without a substantive original anchor has nothing to infer from yet.
+Immediately after saving original interests, use `--event onboarding` instead of `--plan`; after meaningful sourced feedback, use `--event feedback`. Check and complete that profile-update review within the same invocation before the first or next picks. There is no interest-count threshold: one eligible original anchor can trigger the first review. A profile without a substantive original anchor has nothing to infer from yet.
+
+Profile updates and request breadth are separate. A focused request still checks initial or changed original evidence; unchanged focused requests do not refill a sparse hypothesis pool. Wildcard planning stays independent and skips broad maintenance, but does not complete a separate onboarding or feedback event for the agent. One requested pick can be broad, and a due review never changes the requested count, subject or seeds.
 
 The helper triggers the first review, an invalid completion record, changed original interests or their provenance, meaningful sourced user feedback, changed hypotheses, or a pool with fewer than two untried testing hypotheses after a delivered probe. It remembers the evidence reviewed. An unchanged sparse pool, including a decision that no useful proposal exists, does not repeatedly trigger generation. Ordinary delivery and consumption are not feedback; delivered `hypothesis_id` values only identify opportunities already used.
 
@@ -32,7 +34,7 @@ Before delivery, check the record against the same request plan:
 python3 <skill-directory>/scripts/curation.py hypotheses maintenance-check --root <curation-root> --plan <request-plan.json>
 ```
 
-The check exits unsuccessfully when an eligible review is pending. Always pass `--root <curation-root>` to `explore` and `select`. Newly generated broad, non-wildcard plans require it. Those commands check maintenance before eligible broad research and selection. Retain their compact checked result in the batch trace, including a reused current completion. If a helper or persistent storage is unavailable, record a pending review and the concrete limitation, then follow the manual-selection fallback with that method limit disclosed. Do not label it completed.
+The check exits unsuccessfully when an eligible review is pending. Always pass `--root <curation-root>` to `explore` and `select`. Newly generated non-wildcard plans require it, including focused plans, so omitting the root cannot skip a pending profile review. Those commands check maintenance before eligible research and selection. Retain their compact checked result in the batch trace, including a reused current completion. If a helper or persistent storage is unavailable, record a pending review and the concrete limitation, then follow the manual-selection fallback with that method limit disclosed. Do not label it completed.
 
 Maintenance runs within the current invocation, including an existing authorized scheduled run. It creates no new schedule, requests no additional sources, and requires no separate model call. The helper emits at most two compact anchor suggestions when review is due. The host creates at most one new hypothesis per review, the existing cap of eight testing hypotheses remains, and exploration uses the existing adjacent allowance.
 

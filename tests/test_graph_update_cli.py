@@ -57,7 +57,7 @@ class GraphUpdateWorkflowTests(unittest.TestCase):
                 self.assertTrue(plan["graph_update_required"])
 
     def test_selection_requires_root_batch_and_actual_completion(self):
-        self.assertIn("pass --root and --batch-id", self.select(rooted=False)[2])
+        self.assertIn("pass --root", self.select(rooted=False)[2])
         self.assertIn("pass --root and --batch-id", self.select(batch=None)[2])
         self.assertIn("graph update is pending", self.select()[2])
         self.complete()
@@ -90,10 +90,12 @@ class GraphUpdateWorkflowTests(unittest.TestCase):
 
     def test_historical_plan_remains_compatible_without_claiming_completion(self):
         self.plan.pop("graph_update_required")
+        self.plan.pop("hypothesis_maintenance_required")
         self.write("plan.json", self.plan)
         status, output, error = self.select(rooted=False, batch=None)
         self.assertEqual(status, 0, error)
         self.assertNotIn("graph_update", json.loads(output))
+        self.assertNotIn("hypothesis_maintenance", json.loads(output))
 
     def test_three_installed_hosts_run_update_workflow_outside_repository(self):
         for host in ("codex", "claude-code", "pi"):

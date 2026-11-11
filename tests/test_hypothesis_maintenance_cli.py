@@ -107,12 +107,25 @@ class MaintenanceWorkflowTests(unittest.TestCase):
             self.assertIn("must use the same model/", stderr)
         self.assertIn("must use the same model/", self.run_cli("select", extra=("--history", str(self.root / "other.json")))[2])
 
-    def test_focused_and_wildcard_plans_do_not_require_maintenance(self):
-        for options in ({"scope": "focused"}, {"scope": "broad", "mode": "wildcard", "seed": 5}):
+    def test_wildcard_plans_do_not_require_maintenance(self):
+        for options in ({"scope": "focused", "mode": "wildcard", "seed": 5},
+                        {"scope": "broad", "mode": "wildcard", "seed": 5}):
             plan = CURATION["make_plan"](self.profile, **options)
             self.assertFalse(plan["hypothesis_maintenance_required"])
             self.write(self.root / "plan.json", plan)
             self.assertEqual(self.run_cli("explore", rooted=False)[0], 0)
+
+    def test_focused_plan_cannot_skip_a_pending_profile_review_by_omitting_root(self):
+        self.plan = CURATION["make_plan"](self.profile, scope="focused", seed=7)
+        self.write(self.root / "plan.json", self.plan)
+        self.assertTrue(self.plan["hypothesis_maintenance_required"])
+        for command in ("explore", "select"):
+            self.assertIn("--root", self.run_cli(command, rooted=False)[2])
+            self.assertIn("maintenance is due", self.run_cli(command)[2])
+        review = HYPOTHESES["maintenance_plan"](self.root, self.plan)
+        HYPOTHESES["complete_maintenance"](self.root, review, "no_proposal",
+                                          "The original interests are useful independently; no sound shared proposal.")
+        self.assertEqual(self.run_cli("explore")[0], 0)
 
     def test_untried_hypothesis_gets_existing_adjacent_opportunity(self):
         draft = HYPOTHESES["snapshot"](self.root)

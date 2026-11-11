@@ -543,7 +543,7 @@ def _maintenance_eligible(anchors, plan, event):
         raise HypothesisError("maintenance event must be broad, onboarding or feedback")
     if event == "broad" and not isinstance(plan, dict):
         raise HypothesisError("broad maintenance requires the retained request plan")
-    return bool(anchors) and (event != "broad" or (plan.get("scope") == "broad"
+    return bool(anchors) and (event != "broad" or (plan.get("scope") in {"broad", "focused"}
                                                    and plan.get("mode") != "wildcard"))
 
 
@@ -591,6 +591,10 @@ def maintenance_plan(root, plan=None, event="broad"):
         else:
             labels = {"anchors": "anchors_changed", "feedback": "feedback_changed",
                       "pool": "pool_changed", "low_untried_pool": "low_untried_pool"}
+            if event == "broad" and plan.get("scope") == "focused":
+                # Profile evidence still needs review before a narrow request.
+                # Replenishing exploration opportunities belongs to broad discovery.
+                labels = {key: labels[key] for key in ("anchors", "feedback")}
             for component, label in labels.items():
                 if previous["components"][component] != state["components"][component]:
                     triggers.append(label)

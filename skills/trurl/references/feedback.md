@@ -10,7 +10,15 @@ Use sources only within existing authorization. For allowed past-chat review, di
 
 Change persistent baseline weights only when the person comments on the tradeoff or a clear repeated pattern is confirmed. Preserve explicit baselines over inferred ones. For a justified small inferred adjustment, bound each axis change to 0.02 before renormalizing; stronger persistent changes need explicit instruction. This limit does not constrain request-specific effective weights. Keep confidence in [0,1], preserve prior values in the event, and explain each change's evidence. A surprise request or randomized plan is neither durable preference evidence nor schedule opt-in.
 
-Reconcile [hypotheses](taste-hypotheses.md) after meaningful feedback/new interests, run the maintenance planner with `--event feedback`, and complete any due review without manufacturing a proposal. Hypothesis enjoyment/confirmation/rejection evidence retains its original work and scope. Review rejected/retired possibilities before recreating one. Refresh affected [briefs](curators-brief.md) from current sources; their summaries and the Atlas are interpretations, not corroboration.
+After recording meaningful sourced feedback, reconcile [hypotheses](taste-hypotheses.md) and check maintenance in the same invocation:
+
+```sh
+python3 <skill-directory>/scripts/curation.py hypotheses maintenance-plan --root <curation-root> --event feedback
+```
+
+Consume `review_due` before the next picks, even if only one or a focused recommendation was requested. The feedback command's `next` instruction is a step to execute, not a completed review. Save at most one defensible tentative proposal or record a reasoned `reviewed`/`no_proposal` outcome, then `maintenance-complete` the returned review. Use `--event onboarding` after saving newly stated interests. Preserve any retained request's scope, count and seeds; no further user request or separate model call is needed for this maintenance.
+
+Hypothesis enjoyment/confirmation/rejection evidence retains its original work and scope. Review rejected/retired possibilities before recreating one. Refresh affected [briefs](curators-brief.md) from current sources; their summaries and the Atlas are interpretations, not corroboration.
 
 When evidence is corrected or forgotten, invalidate affected briefs immediately if a replacement is not ready. Fulfill forgetting by removing requested raw evidence and dependent copies, hypothesis interpretations, graph content where relevant, exports and temporary drafts; invalidating a cache alone does not erase its sources. Preserve minimal content-free change metadata where needed. Do not rewrite historical delivery as a new user reaction.
 

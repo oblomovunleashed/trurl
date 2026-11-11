@@ -29,7 +29,7 @@ Replace the location with the actual selected path, using a readable home-relati
 
 Use the Sunday line only for eligible new onboarding on a host with a native scheduler. Use the person's stated time if they give one. If their local timezone is still unknown, leave out the exact time and resolve it before scheduling. If scheduling is unavailable, say they can ask for an edition any time.
 
-If the person gives you a full brain dump before seeing the weekly notice, give them their first selection and include the notice in that reply. Apply the default only after they have had a chance to respond. Keep a one-off request in the format and count they asked for.
+If the person gives you a full brain dump before seeing the weekly notice, review the recorded interests as described below, then give them their first selection and include the notice in that reply. Apply the default only after they have had a chance to respond. Keep a one-off request in the format and count they asked for.
 
 Treat a voice transcript or rough notes as ordinary user input. Accept multiple categories or anchors without a cap. A brain dump with usable interests can be enough to start. If no format is chosen, use a provisional mix for the first selection and keep the saved format choice open. Ask one question about format only if the current request needs it.
 Record distinct interests as separate anchors, with their wording, scope, and current-message provenance. Keep work or personal context separate from stated preferences. Preserve ambiguity in dictated names unless resolving it matters to the selection.
@@ -37,6 +37,14 @@ Names and links may be references, research assignments, dislikes, or enjoyed wo
 Do not open every supplied link just to finish onboarding. Read relevant supplied evidence when needed and record what was actually inspected.
 Current-request limits remain temporary unless the person makes them lasting preferences. Category choices establish preferred formats, not subjects, personality, or expertise; unchosen categories are not dislikes.
 Apply substantive lasting interests and preferences to the existing `interests` and `taste` fields with their evidence and scope; `onboarding.anchors` is the input record, not a second taste model. Preserve temporary goals in the current batch request. The discovery helper reads `interests` and the retained request, so include the usable current anchor there rather than relying only on onboarding metadata. Constraints and avoid/reference-only examples do not supply positive fit by themselves.
+
+After saving those original interests, check hypothesis maintenance before the first picks:
+
+```sh
+python3 <skill-directory>/scripts/curation.py hypotheses maintenance-plan --root <curation-root> --event onboarding
+```
+
+If `review_due` is true, follow [the hypothesis workflow](taste-hypotheses.md): inspect the original evidence, consider competing explanations, save at most one defensible tentative hypothesis, and record `maintenance-complete` against that review. A reasoned `reviewed` or `no_proposal` is also valid. The agent does this within the current setup exchange; Python does not generate the hypothesis. Do not wait for a particular number of interests or ask the person to request hypotheses separately. One eligible original interest is enough for review. Keep their requested recommendation count, focus, constraints and source permissions unchanged.
 
 Offer agent memory separately after the first result when it would help and the choice is still open:
 

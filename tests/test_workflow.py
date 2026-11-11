@@ -52,6 +52,10 @@ class RequestHelperTests(unittest.TestCase):
         shutil.copyfile(REPOSITORY / "examples/profile.demo.json", self.root / "model/profile.json")
         self.model = self.root / "model"
         self.work = self.base / "request"
+        review = HYPOTHESES["maintenance_plan"](self.root, event="onboarding")
+        if review["review_due"]:
+            HYPOTHESES["complete_maintenance"](
+                self.root, review, "no_proposal", "Fixture onboarding was reviewed; keep the supplied interests independent.")
 
     def state(self):
         return {path.name: path.read_bytes() for path in self.model.iterdir()}
@@ -74,6 +78,17 @@ class RequestHelperTests(unittest.TestCase):
                                      "reason": "A plausible direction from the stated research interest.",
                                      "anchor_ids": ["a"], "status": "testing", "evidence": []}]
         HYPOTHESES["save"](self.root, draft)
+
+    def add_original_interests(self, count=28):
+        profile = CURATION["generic_profile"]("Synthetic person")
+        profile["interests"] = [
+            {"id": "interest-" + str(i), "topic": "Synthetic topic " + str(i),
+             "kind": "explicit", "scope": "persistent", "source_provenance": ["setup"]}
+            for i in range(count)]
+        profile["provenance"] = [{"id": "setup", "kind": "user_statement",
+                                  "locator": "fixture://synthetic-onboarding"}]
+        (self.model / "profile.json").write_text(json.dumps(profile), encoding="utf-8")
+        (self.model / "hypothesis-maintenance.json").unlink(missing_ok=True)
 
     def select(self, started, candidates, count=3):
         """Research, complete the graph step in one call and select, as a host would."""
@@ -182,6 +197,54 @@ class RequestHelperTests(unittest.TestCase):
                                      "--profile", str(self.model / "profile.json"), "--count", "2"])
         self.assertEqual(status, 0, error)
         self.assertEqual(len(briefs["briefs"]), 2)
+
+    def test_one_generic_recommendation_after_28_interests_requires_review(self):
+        self.add_original_interests()
+        before = (self.model / "profile.json").read_bytes()
+        started = WORKFLOW["start"](root=self.root, request="Give me one recommendation", count=1,
+                                    seed=7, discovery_seed=11, out=self.work)
+        self.assertEqual(started["status"], "maintenance_due")
+        self.assertEqual(started["plan"]["scope"], "broad")
+        self.assertIsNone(started["exploration"])
+        self.assertEqual(len(started["context"]["interests"]), 28)
+        self.assertEqual(started["hypothesis_maintenance"]["triggers"], ["first_review"])
+        self.assertEqual((self.model / "profile.json").read_bytes(), before)
+
+    def test_focused_one_pick_can_save_a_hypothesis_and_resume_without_broadening(self):
+        self.add_original_interests()
+        started = WORKFLOW["start"](root=self.root, request="One book about Synthetic topic 0",
+                                    scope="focused", fixed=True, count=1, seed=7,
+                                    discovery_seed=11, out=self.work)
+        self.assertEqual(started["status"], "maintenance_due")
+        self.assertEqual(started["plan"]["scope"], "focused")
+        plan_bytes = Path(started["files"]["plan"]).read_bytes()
+        pool_path = self.work / "candidates.json"
+        pool_path.write_text(json.dumps([candidate("only-pick")]), encoding="utf-8")
+        status, unused, error = cli(["select", "--root", str(self.root), "--batch-id", started["batch_id"],
+                                     "--plan", started["files"]["plan"], "--candidates", str(pool_path),
+                                     "--count", "1"])
+        self.assertEqual(status, 2)
+        self.assertIn("maintenance is due", error)
+        draft = HYPOTHESES["snapshot"](self.root)
+        draft["taste_hypotheses"] = [{"id": "joint-interest", "topic": "A synthetic shared question",
+                                     "anchor_ids": ["interest-0", "interest-1"], "status": "testing", "evidence": [],
+                                     "reason": "The two topics might share a question; independent enjoyment is an alternative. "
+                                               "Research a work connecting both to distinguish them."}]
+        HYPOTHESES["save"](self.root, draft)
+        HYPOTHESES["complete_maintenance"](
+            self.root, started["hypothesis_maintenance"], "saved",
+            "Saved one tentative connection without changing the focused request.", ["joint-interest"])
+        status, exploration, error = cli(["explore", "--root", str(self.root), "--plan", started["files"]["plan"],
+                                           "--profile", str(self.model / "profile.json"), "--count", "1", "--seed", "11"])
+        self.assertEqual(status, 0, error)
+        self.assertEqual(len(exploration["briefs"]), 1)
+        self.assertEqual(Path(started["files"]["plan"]).read_bytes(), plan_bytes)
+        self.assertEqual(exploration["hypothesis_maintenance"]["receipt"]["hypothesis_ids"], ["joint-interest"])
+        update, selection = self.select(started, [candidate("only-pick")], count=1)
+        self.assertEqual([item["id"] for item in selection["selected"]], ["only-pick"])
+        profile = json.loads((self.model / "profile.json").read_text())
+        self.assertEqual(len(profile["interests"]), 28)
+        self.assertEqual(profile["taste_hypotheses"][0]["status"], "testing")
 
     def test_graph_update_completes_in_one_call_and_reuses_a_current_record(self):
         started = self.begin()
